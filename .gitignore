@@ -1,65 +1,19 @@
-# =====================
-# ENV FILES (CRITICAL)
-# =====================
-.env
-.env.*
-!.env.example
-
-# =====================
-# NODE
-# =====================
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-
-# =====================
-# NEXT.JS
-# =====================
-.next/
-out/
-
-# =====================
-# BUILD FILES
-# =====================
-dist/
-build/
-
-# =====================
-# UPLOADS (backend)
-# =====================
-uploads/
-
-# =====================
-# OS FILES
-# =====================
+# General
 .DS_Store
-Thumbs.db
-
-# =====================
-# LOGS
-# =====================
-logs
-*.log
-
-# =====================
-# CACHE
-# =====================
-.cache/
-.tmp/
-
-# =====================
-# IDE
-# =====================
-.vscode/
 .idea/
+.vscode/
+*.log
+.env
+.env.local
+.env.*.local
 
-# =====================
-# TYPESCRIPT
-# =====================
-*.tsbuildinfo
+# Node
+node_modules/
 
-# =====================
-# OPTIONAL (if present)
-# =====================
-coverage/
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+env/
+.venv/
