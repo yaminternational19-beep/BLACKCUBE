@@ -1,9 +1,22 @@
 from rest_framework import viewsets, status
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import Page
 from .serializers import PageSerializer
 
 class PageViewSet(viewsets.ViewSet):
+    def get_authenticators(self):
+        # Ignore invalid JWTs for public GET endpoints by disabling authentication for GET requests
+        if self.request.method == 'GET':
+            return []
+        return super().get_authenticators()
+
+    def get_permissions(self):
+        # Public CMS API for GET, but protected admin API for POST/PUT/DELETE
+        if self.request.method == 'GET':
+            return [AllowAny()]
+        return [IsAuthenticated()]
+
     def list(self, request):
         pages = Page.objects.all()
         serializer = PageSerializer(pages, many=True)
