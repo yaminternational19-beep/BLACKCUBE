@@ -73,7 +73,7 @@ const Header = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <nav className="hidden lg:flex items-center">
+            <nav className="hidden lg:flex items-center absolute left-1/2 -translate-x-1/2">
               <div className="flex items-center rounded-full bg-white/5 border border-white/10 p-1 space-x-1">
                 {navigation.map((item) => (
                   <Link
