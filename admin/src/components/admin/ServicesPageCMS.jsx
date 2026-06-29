@@ -764,10 +764,10 @@ export function ServicesPageCMS() {
           <TabsTrigger value="filters">Categories Filter</TabsTrigger>
           <TabsTrigger value="services">Services</TabsTrigger>
           <TabsTrigger value="categories">Categories Tabs</TabsTrigger>
-          <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
+          {/* <TabsTrigger value="testimonials">Testimonials</TabsTrigger> */}
           <TabsTrigger value="industries">Industries</TabsTrigger>
           <TabsTrigger value="process">Process & Tech</TabsTrigger>
-          <TabsTrigger value="faq">FAQ & CTA</TabsTrigger>
+          {/* <TabsTrigger value="faq">FAQ & CTA</TabsTrigger> */}
         </TabsList>
 
         {/* Hero Section */}
@@ -850,14 +850,7 @@ export function ServicesPageCMS() {
             </CardContent>
           </Card>
 
-          <Card hover className="p-6">
-            <CardHeader><CardTitle>Testimonials Section</CardTitle></CardHeader>
-            <CardContent className="space-y-4">
-              <AdminInput value={headings.testimonialsTitlePrefix} onChange={e => updateHeading('testimonialsTitlePrefix', e.target.value)} placeholder="Title prefix (e.g., What Our)" />
-              <AdminInput value={headings.testimonialsTitleHighlight} onChange={e => updateHeading('testimonialsTitleHighlight', e.target.value)} placeholder="Title highlight (e.g., Clients Say)" />
-              <AdminTextarea rows={3} value={headings.testimonialsDescription} onChange={e => updateHeading('testimonialsDescription', e.target.value)} placeholder="Description" />
-            </CardContent>
-          </Card>
+
 
           <Card hover className="p-6">
             <CardHeader><CardTitle>Industries Section</CardTitle></CardHeader>
@@ -877,14 +870,7 @@ export function ServicesPageCMS() {
             </CardContent>
           </Card>
 
-          <Card hover className="p-6">
-            <CardHeader><CardTitle>FAQ Section</CardTitle></CardHeader>
-            <CardContent className="space-y-4">
-              <AdminInput value={headings.faqTitlePrefix} onChange={e => updateHeading('faqTitlePrefix', e.target.value)} placeholder="Title prefix (e.g., Frequently)" />
-              <AdminInput value={headings.faqTitleHighlight} onChange={e => updateHeading('faqTitleHighlight', e.target.value)} placeholder="Title highlight (e.g., Asked Questions)" />
-              <AdminTextarea rows={3} value={headings.faqDescription} onChange={e => updateHeading('faqDescription', e.target.value)} placeholder="Description" />
-            </CardContent>
-          </Card>
+
 
           <Card hover className="p-6">
             <CardHeader><CardTitle>Bottom CTA</CardTitle></CardHeader>

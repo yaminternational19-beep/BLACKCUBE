@@ -92,11 +92,11 @@ export const pageApi = {
   },
   // Get all pages
   list: async () => {
-    return apiRequest('/pages', 'GET');
+    return apiRequest('/pages/', 'GET');
   },
   // Create a new page
   create: async pageData => {
-    return apiRequest('/pages', 'POST', pageData);
+    return apiRequest('/pages/', 'POST', pageData);
   },
   // Update an existing page
   update: async (pageId, pageData) => {
@@ -130,13 +130,13 @@ export const careerApi = {
 // Service API functions
 export const serviceApi = {
   list: async () => {
-    return apiRequest('/services', 'GET');
+    return apiRequest('/services/', 'GET');
   },
   get: async id => {
     return apiRequest(`/services/${id}`, 'GET');
   },
   create: async serviceData => {
-    return apiRequest('/services', 'POST', serviceData);
+    return apiRequest('/services/', 'POST', serviceData);
   },
   update: async (id, serviceData) => {
     return apiRequest(`/services/${id}`, 'PUT', serviceData);
@@ -149,13 +149,13 @@ export const serviceApi = {
 // Portfolio API functions
 export const portfolioApi = {
   list: async () => {
-    return apiRequest('/portfolio', 'GET');
+    return apiRequest('/portfolio/', 'GET');
   },
   get: async id => {
     return apiRequest(`/portfolio/${id}`, 'GET');
   },
   create: async portfolioData => {
-    return apiRequest('/portfolio', 'POST', portfolioData);
+    return apiRequest('/portfolio/', 'POST', portfolioData);
   },
   update: async (id, portfolioData) => {
     return apiRequest(`/portfolio/${id}`, 'PUT', portfolioData);
@@ -173,16 +173,22 @@ export const contactSubmissionApi = {
     if (params?.limit) queryParams.append('limit', params.limit.toString());
     if (params?.q) queryParams.append('q', params.q);
     const query = queryParams.toString();
-    return apiRequest(`/admin/contact-submissions${query ? `?${query}` : ''}`, 'GET');
+    return apiRequest(`/admin/contact-submissions/${query ? `?${query}` : ''}`, 'GET');
   },
   get: async id => {
     return apiRequest(`/admin/contact-submissions/${id}`, 'GET');
   },
   create: async submissionData => {
-    return apiRequest('/admin/contact-submissions', 'POST', submissionData);
+    return apiRequest('/admin/contact-submissions/', 'POST', submissionData);
   },
   delete: async id => {
     return apiRequest(`/admin/contact-submissions/${id}`, 'DELETE');
+  },
+  update: async (id, data) => {
+    return apiRequest(`/admin/contact-submissions/${id}/`, 'PATCH', data);
+  },
+  markAsRead: async id => {
+    return apiRequest(`/admin/contact-submissions/${id}/`, 'PATCH', { is_read: true });
   }
 };
 
@@ -208,6 +214,16 @@ export const jobApplicationApi = {
   },
   delete: async id => {
     return apiRequest(`/job-applications/${id}`, 'DELETE');
+  },
+  markAsRead: async id => {
+    return apiRequest(`/job-applications/${id}/`, 'PATCH', { is_read: true });
+  }
+};
+
+// Notifications API
+export const notificationsApi = {
+  getUnreadCounts: async () => {
+    return apiRequest('/admin/unread-counts/', 'GET');
   }
 };
 

@@ -16,22 +16,26 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from apps.admin.notifications import UnreadCountsAPIView
 
 urlpatterns = [
     # path('admin/', admin.site.urls), # Django's built-in admin, disabled if not needed
     path('api/auth/', include('apps.authentication.urls')),
     
     # Admin APIs
+    path('api/admin/unread-counts/', UnreadCountsAPIView.as_view(), name='unread_counts'),
     path('api/pages/', include('apps.admin.pages.urls')),
     path('api/admin/blogs/', include('apps.admin.blogs.urls')),
     path('api/admin/contact-submissions/', include('apps.admin.contact.urls')),
     path('api/', include('apps.admin.jobs.urls')),
     path('api/portfolio/', include('apps.admin.portfolio.urls')),
     path('api/services/', include('apps.admin.services.urls')),
+    path('api/admin/footer/', include('apps.admin.footer.urls')),
     
     # Website APIs
     path('api/website/blogs/', include('apps.website.blogs.urls')),
     path('api/contact-submissions/', include('apps.website.contact.urls')),
+    path('api/website/footer/', include('apps.website.footer.urls')),
 
     # Testing APIs removed for production
 ]

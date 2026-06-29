@@ -1,4 +1,5 @@
 'use client';
+import { useState, useEffect } from 'react';
 
 import Button from "@/components/ui/Button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -6,6 +7,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { SidebarTrigger } from "@/components/ui/sidebar";
 import { LogOut } from "lucide-react";
 export function AdminTopbar({}) {
+  const [adminEmail, setAdminEmail] = useState('admin@example.com');
+
+  useEffect(() => {
+    const email = localStorage.getItem('admin_email');
+    if (email) {
+      setAdminEmail(email);
+    }
+  }, []);
+
   return <header className="h-16 bg-background border-b border-border flex items-center justify-between px-6 w-full">
       <div className="flex items-center gap-4">
         <SidebarTrigger className="h-8 w-8" />
@@ -36,7 +46,7 @@ export function AdminTopbar({}) {
               <div className="flex flex-col space-y-1">
                 <p className="text-sm font-medium leading-none">Admin User</p>
                 <p className="text-xs leading-none text-muted-foreground">
-                  admin@example.com
+                  {adminEmail}
                 </p>
               </div>
             </DropdownMenuLabel>
@@ -52,6 +62,7 @@ export function AdminTopbar({}) {
             <DropdownMenuSeparator />
             <DropdownMenuItem className="hover:bg-muted cursor-pointer text-destructive" onClick={() => {
             localStorage.removeItem('admin_token');
+            localStorage.removeItem('admin_email');
             window.location.href = '/admin/login';
           }}>
               <LogOut className="mr-2 h-4 w-4" />

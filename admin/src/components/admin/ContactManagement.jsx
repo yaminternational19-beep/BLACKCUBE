@@ -10,6 +10,18 @@ export function ContactManagement() {
   const [submissions, setSubmissions] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedSubmission, setSelectedSubmission] = useState(null);
+
+  const handleViewSubmission = async (submission) => {
+    setSelectedSubmission(submission);
+    if (!submission.is_read) {
+      try {
+        await contactSubmissionApi.markAsRead(submission.id);
+        setSubmissions(prev => prev.map(sub => sub.id === submission.id ? { ...sub, is_read: true } : sub));
+      } catch (err) {
+        console.error('Failed to mark as read', err);
+      }
+    }
+  };
   useEffect(() => {
     loadSubmissions();
   }, []);
@@ -87,7 +99,7 @@ export function ContactManagement() {
                       </div>
                     </div>
                   </div>
-                  <Badge variant="default">New</Badge>
+                  {!submission.is_read && <Badge variant="default" className="bg-red-500">New</Badge>}
                 </div>
               </CardHeader>
               <CardContent className="space-y-4">
@@ -102,7 +114,7 @@ export function ContactManagement() {
                   </p>
                 </div>
                 <div className="flex gap-2">
-                  <Button size="sm" variant="outline" onClick={() => setSelectedSubmission(submission)}>
+                  <Button size="sm" variant="outline" onClick={() => handleViewSubmission(submission)}>
                     <Eye className="w-3 h-3 mr-1" />
                     View Details
                   </Button>

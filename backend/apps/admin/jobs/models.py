@@ -8,6 +8,7 @@ class JobPosting(models.Model):
     
     description = models.TextField(blank=True, default='')
     salary = models.CharField(max_length=255, blank=True, default='')
+    experience = models.CharField(max_length=255, blank=True, default='')
     postedDate = models.CharField(max_length=100, blank=True, default='')
     deadline = models.CharField(max_length=100, blank=True, default='')
 
@@ -37,6 +38,7 @@ class JobApplication(models.Model):
     coverLetter = models.TextField(blank=True, default='')
     resumeUrl = models.CharField(max_length=500, blank=True, default='')
     appliedDate = models.CharField(max_length=100, blank=True, default='')
+    is_read = models.BooleanField(default=False)
     status = models.CharField(max_length=50, choices=STATUS_CHOICES, default='pending')
     
     jobId = models.CharField(max_length=255, blank=True, null=True)

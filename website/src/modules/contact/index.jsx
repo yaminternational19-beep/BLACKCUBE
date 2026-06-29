@@ -17,7 +17,7 @@ import SEO from '@/components/SEO';
 import Layout from '@/components/layout/Layout';
 import Button from '@/components/ui/Button';
 import { Card } from '@/components/ui/Card';
-import { pageApi, contactSubmissionApi } from '@/api';
+import { Link } from 'react-router-dom';import { pageApi, contactSubmissionApi } from '@/api';
 
 const ContactPage = () => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 });
@@ -239,13 +239,12 @@ const ContactPage = () => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.5 }}>
-                  
-                  <a href="#contact-form" className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-black font-semibold rounded hover:bg-gray-200 transition-colors">
+                  <a href="#contact-form" className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-black font-semibold rounded hover:bg-gray-200 transition-colors">
                     {hero.primaryCta}
                   </a>
-                  <a href="/services" className="px-6 sm:px-8 py-3 sm:py-4 border border-gray-700 text-white font-semibold rounded hover:bg-gray-900 transition-colors">
+                  <Link to="/services" className="px-6 sm:px-8 py-3 sm:py-4 border border-gray-700 text-white font-semibold rounded hover:bg-gray-900 transition-colors">
                     {hero.secondaryCta}
-                  </a>
+                  </Link>
                 </motion.div>
               </motion.div>
             </div>

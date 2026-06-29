@@ -221,13 +221,13 @@ const HomeClient = ({ initialData }) => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.5 }}>
-                  
+
                   <Link to='/contact' className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-black font-semibold rounded hover:bg-gray-200 transition-colors">
                     {heroSlides[0].cta}
                   </Link>
-                  <button className="px-6 sm:px-8 py-3 sm:py-4 border border-gray-700 text-white font-semibold rounded hover:bg-gray-900 transition-colors">
+                  <Link to="/services" className="px-6 sm:px-8 py-3 sm:py-4 border border-gray-700 text-white font-semibold rounded hover:bg-gray-900 transition-colors">
                     {heroSlides[0].cta2}
-                  </button>
+                  </Link>
                 </motion.div>
               </motion.div>
             </div>
@@ -506,9 +506,9 @@ const HomeClient = ({ initialData }) => {
                 <Link to='/contact' className="px-8 py-4 bg-white text-black font-bold rounded-lg hover:bg-gray-200 transition-colors">
                   {finalCta.primaryButton}
                 </Link>
-                <Link to='/services' className="px-8 py-4 border border-gray-700 text-white font-bold rounded-lg hover:bg-gray-900 transition-colors">
+                {/* <Link to='/services' className="px-8 py-4 border border-gray-700 text-white font-bold rounded-lg hover:bg-gray-900 transition-colors">
                   {finalCta.secondaryButton}
-                </Link>
+                </Link> */}
               </div>
             </motion.div>
           </div>

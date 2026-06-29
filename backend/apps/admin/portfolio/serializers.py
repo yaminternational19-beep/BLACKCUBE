@@ -4,13 +4,13 @@ from .models import PortfolioItem, PortfolioCategory, Technology, TeamRole, Port
 class PortfolioItemSerializer(serializers.ModelSerializer):
     category = serializers.CharField(source='category.name', allow_blank=True, required=False)
     technologies = serializers.ListField(
-        child=serializers.CharField(), required=False
+        child=serializers.CharField(), required=False, write_only=True
     )
     methods = serializers.ListField(
-        child=serializers.CharField(), required=False
+        child=serializers.CharField(), required=False, write_only=True
     )
     team = serializers.ListField(
-        child=serializers.DictField(), required=False
+        child=serializers.DictField(), required=False, write_only=True
     )
 
     class Meta:

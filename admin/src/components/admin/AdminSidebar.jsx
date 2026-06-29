@@ -1,7 +1,8 @@
 'use client';
 
-// import { useState } from "react";
+import { useState, useEffect } from "react";
 import { LayoutDashboard, FileText, Settings, ChevronRight, Users } from "lucide-react";
+import { notificationsApi } from "@/api";
 import { Sidebar, SidebarContent, SidebarGroup, SidebarGroupContent,
 // SidebarGroupLabel,
 SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/components/ui/sidebar";
@@ -27,12 +28,7 @@ const sidebarItems = [{
   title: "Services Page",
   icon: FileText,
   description: "Edit Services Page Content"
-}, {
-  id: "contact-cms",
-  title: "Contact Page",
-  icon: FileText,
-  description: "Edit Contact Page Content"
-}, {
+},  {
   id: "portfolio-cms",
   title: "Portfolio Page",
   icon: FileText,
@@ -42,6 +38,11 @@ const sidebarItems = [{
   title: "Career Page",
   icon: FileText,
   description: "Edit Career Page Content"
+},{
+  id: "contact-cms",
+  title: "Contact Page",
+  icon: FileText,
+  description: "Edit Contact Page Content"
 }, {
   id: "users",
   title: "Contact Submissions",
@@ -52,15 +53,39 @@ const sidebarItems = [{
   title: "Job Applications",
   icon: FileText,
   description: "Manage Job Applications"
+}, {
+  id: "footer-cms",
+  title: "Footer Settings",
+  icon: Settings,
+  description: "Manage Footer Information"
 }];
 export function AdminSidebar({
   activeTab,
   onTabChange
 }) {
-  const {
-    state
-  } = useSidebar();
+  const { state } = useSidebar();
   const isCollapsed = state === "collapsed";
+  
+  const [unreadCounts, setUnreadCounts] = useState({ users: 0, 'job-applications': 0 });
+
+  useEffect(() => {
+    const fetchCounts = async () => {
+      try {
+        const res = await notificationsApi.getUnreadCounts();
+        if (res.success) {
+          setUnreadCounts({
+            users: res.data.contact_submissions,
+            'job-applications': res.data.job_applications
+          });
+        }
+      } catch (err) {
+        console.error('Failed to fetch unread counts', err);
+      }
+    };
+    fetchCounts();
+    const interval = setInterval(fetchCounts, 5000);
+    return () => clearInterval(interval);
+  }, []);
   return <Sidebar className={cn("border-r border-border transition-all duration-300 h-screen flex flex-col", isCollapsed ? "w-16" : "w-64")} collapsible="icon">
       {/* Fixed Header */}
       <div className="p-4 border-b border-sidebar-border flex-shrink-0">
@@ -95,9 +120,21 @@ export function AdminSidebar({
                       console.log('Changing tab to:', item.id);
                       onTabChange(item.id);
                     }}>
-                      <div className="flex items-center gap-4">
-                        <item.icon className={cn("h-5 w-5 flex-shrink-0 transition-colors", activeTab === item.id ? "text-primary-blue" : "text-primary-gray")} />
-                        {!isCollapsed && <span className="text-[15px]">{item.title}</span>}
+                      <div className="flex items-center gap-4 relative">
+                        <div className="relative">
+                          <item.icon className={cn("h-5 w-5 flex-shrink-0 transition-colors", activeTab === item.id ? "text-primary-blue" : "text-primary-gray")} />
+                          {isCollapsed && unreadCounts[item.id] > 0 && (
+                            <span className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 rounded-full border border-background shadow-sm" />
+                          )}
+                        </div>
+                        {!isCollapsed && (
+                          <div className="flex items-center gap-2">
+                            <span className="text-[15px]">{item.title}</span>
+                            {unreadCounts[item.id] > 0 && (
+                              <span className="w-2.5 h-2.5 bg-red-500 rounded-full shadow-sm" />
+                            )}
+                          </div>
+                        )}
                       </div>
                       {!isCollapsed && activeTab === item.id && <ChevronRight className="h-5 w-5 text-primary-blue ml-auto" />}
                     </button>

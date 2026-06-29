@@ -28,21 +28,6 @@ export const axiosInstance = axios.create({
   timeout: 10000,
 });
 
-axiosInstance.interceptors.request.use(
-  (config) => {
-    if (typeof window !== 'undefined') {
-      const token = localStorage.getItem('admin_token');
-      if (token) {
-        config.headers.Authorization = `Bearer ${token}`;
-      }
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
-
 axiosInstance.interceptors.response.use(
   (response) => {
     return response;
@@ -82,14 +67,14 @@ async function apiRequest(endpoint, method = 'GET', data = undefined) {
 
 export const pageApi = {
   get: async (pageId) => apiRequest(`/pages/${pageId}`, 'GET'),
-  list: async () => apiRequest('/pages', 'GET'),
-  create: async (pageData) => apiRequest('/pages', 'POST', pageData),
+  list: async () => apiRequest('/pages/', 'GET'),
+  create: async (pageData) => apiRequest('/pages/', 'POST', pageData),
   update: async (pageId, pageData) => apiRequest(`/pages/${pageId}`, 'PUT', pageData),
   delete: async (pageId) => apiRequest(`/pages/${pageId}`, 'DELETE'),
 };
 
 export const careerApi = {
-  list: async () => apiRequest('/careers', 'GET'),
+  list: async () => apiRequest('/careers/', 'GET'),
   get: async (id) => apiRequest(`/careers/${id}`, 'GET'),
   create: async (jobData) => apiRequest('/careers/', 'POST', jobData),
   update: async (id, jobData) => apiRequest(`/careers/${id}/`, 'PUT', jobData),
@@ -97,17 +82,17 @@ export const careerApi = {
 };
 
 export const serviceApi = {
-  list: async () => apiRequest('/services', 'GET'),
+  list: async () => apiRequest('/services/', 'GET'),
   get: async (id) => apiRequest(`/services/${id}`, 'GET'),
-  create: async (serviceData) => apiRequest('/services', 'POST', serviceData),
+  create: async (serviceData) => apiRequest('/services/', 'POST', serviceData),
   update: async (id, serviceData) => apiRequest(`/services/${id}`, 'PUT', serviceData),
   delete: async (id) => apiRequest(`/services/${id}`, 'DELETE'),
 };
 
 export const portfolioApi = {
-  list: async () => apiRequest('/portfolio', 'GET'),
+  list: async () => apiRequest('/portfolio/', 'GET'),
   get: async (id) => apiRequest(`/portfolio/${id}`, 'GET'),
-  create: async (portfolioData) => apiRequest('/portfolio', 'POST', portfolioData),
+  create: async (portfolioData) => apiRequest('/portfolio/', 'POST', portfolioData),
   update: async (id, portfolioData) => apiRequest(`/portfolio/${id}`, 'PUT', portfolioData),
   delete: async (id) => apiRequest(`/portfolio/${id}`, 'DELETE'),
 };
@@ -119,7 +104,7 @@ export const contactSubmissionApi = {
     if (params?.limit) queryParams.append('limit', params.limit.toString());
     if (params?.q) queryParams.append('q', params.q);
     const query = queryParams.toString();
-    return apiRequest(`/contact-submissions${query ? `?${query}` : ''}`, 'GET');
+    return apiRequest(`/contact-submissions/${query ? `?${query}` : ''}`, 'GET');
   },
   get: async (id) => apiRequest(`/contact-submissions/${id}`, 'GET'),
   create: async (submissionData) => apiRequest('/contact-submissions/', 'POST', submissionData),
@@ -134,7 +119,7 @@ export const jobApplicationApi = {
     if (params?.q) queryParams.append('q', params.q);
     if (params?.status) queryParams.append('status', params.status);
     const query = queryParams.toString();
-    return apiRequest(`/job-applications${query ? `?${query}` : ''}`, 'GET');
+    return apiRequest(`/job-applications/${query ? `?${query}` : ''}`, 'GET');
   },
   get: async (id) => apiRequest(`/job-applications/${id}`, 'GET'),
   create: async (applicationData) => apiRequest('/job-applications/', 'POST', applicationData),

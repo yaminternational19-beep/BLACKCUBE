@@ -8,6 +8,7 @@ import Portfolio from './modules/portfolio';
 import Services from './modules/services';
 import Career from './modules/career';
 import Contact from './modules/contact';
+import LegalPage from './modules/legal/LegalPage';
 
 function App() {
   return (
@@ -19,6 +20,9 @@ function App() {
         <Route path="/services" element={<Services />} />
         <Route path="/career" element={<Career />} />
         <Route path="/contact" element={<Contact />} />
+        <Route path="/privacy" element={<LegalPage />} />
+        <Route path="/terms" element={<LegalPage />} />
+        <Route path="/cookies" element={<LegalPage />} />
       </Routes>
     </Router>
   );

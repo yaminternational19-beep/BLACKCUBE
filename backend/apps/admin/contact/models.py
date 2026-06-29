@@ -9,6 +9,7 @@ class ContactSubmission(models.Model):
     service = models.CharField(max_length=255, blank=True, null=True)
     company = models.CharField(max_length=255, blank=True, default='')
     message = models.TextField(blank=True, default='')
+    is_read = models.BooleanField(default=False)
 
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

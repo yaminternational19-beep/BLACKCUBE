@@ -11,7 +11,7 @@ import Layout from '@/components/layout/Layout';
 import { Card } from '@/components/ui/Card';
 import { defaultAboutPageData } from '@/data/about';
 import { pageApi, getAssetUrl } from '@/api';
-
+import { Link } from 'react-router-dom';
 
 
 
@@ -132,13 +132,12 @@ const AboutClient = ({ initialData }) => {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6, delay: 0.5 }}>
-                  
-                  <button className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-black font-semibold rounded hover:bg-gray-200 transition-colors">
+                  <Link to="/contact" className="px-6 sm:px-8 py-3 sm:py-4 bg-white text-black font-semibold rounded hover:bg-gray-200 transition-colors">
                     {aboutData.heroContent.primaryCta}
-                  </button>
-                  <button className="px-6 sm:px-8 py-3 sm:py-4 border border-gray-700 text-white font-semibold rounded hover:bg-gray-900 transition-colors">
+                  </Link>
+                  <Link to="/services" className="px-6 sm:px-8 py-3 sm:py-4 border border-gray-700 text-white font-semibold rounded hover:bg-gray-900 transition-colors">
                     {aboutData.heroContent.secondaryCta}
-                  </button>
+                  </Link>
                 </motion.div>
               </motion.div>
             </div>

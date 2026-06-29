@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { useNavigate, useLocation, Link } from 'react-router-dom';
 import { Mail, Phone, MapPin } from 'lucide-react';
 import { FaLinkedin as Linkedin, FaTwitter as Twitter, FaFacebook as Facebook, FaInstagram as Instagram } from 'react-icons/fa';
@@ -23,6 +24,23 @@ const Footer = () => {
 
   const currentYear = new Date().getFullYear();
 
+  const [footerData, setFooterData] = useState({});
+
+  useEffect(() => {
+    const fetchFooter = async () => {
+      try {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/website/footer/`);
+        if (response.ok) {
+          const data = await response.json();
+          setFooterData(data);
+        }
+      } catch (error) {
+        console.error('Error fetching footer data:', error);
+      }
+    };
+    fetchFooter();
+  }, []);
+
   return (
     <footer className="bg-black text-white py-16 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black z-0" />
@@ -33,12 +51,35 @@ const Footer = () => {
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 lg:pr-28">
         {/* Top Section - Logo and Social Media */}
         <div className="flex flex-col md:flex-row items-center md:items-center justify-between gap-6 text-center md:text-left mb-16 pb-8 border-b border-gray-800">
-          {/* Logo */}
+          {/* Logo & Contact Info */}
           <div className="flex flex-col items-center md:items-start gap-4 md:mb-0">
             <img src="/logo.png" alt="BLACK CUBE SOLUTIONS LLC Logo" className="h-12 w-auto object-contain" />
             <div className="text-2xl md:text-3xl font-bold">
-              BLACK CUBE SOLUTIONS LLC
+              {footerData.company_name || 'BLACK CUBE SOLUTIONS LLC'}
             </div>
+            
+            {(footerData.email || footerData.phone || footerData.address) && (
+              <div className="flex flex-col items-center md:items-start gap-2 mt-1 text-gray-400 text-sm">
+                {footerData.email && (
+                  <div className="flex items-center gap-2">
+                    <Mail className="w-4 h-4" /> 
+                    <a href={`mailto:${footerData.email}`} className="hover:text-white transition-colors">{footerData.email}</a>
+                  </div>
+                )}
+                {footerData.phone && (
+                  <div className="flex items-center gap-2">
+                    <Phone className="w-4 h-4" /> 
+                    <a href={`tel:${footerData.phone}`} className="hover:text-white transition-colors">{footerData.phone}</a>
+                  </div>
+                )}
+                {footerData.address && (
+                  <div className="flex items-start gap-2 max-w-xs text-center md:text-left mt-1">
+                    <MapPin className="w-4 h-4 mt-1 shrink-0" /> 
+                    <span>{footerData.address}</span>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
 
           {/* Social Media */}
@@ -47,24 +88,43 @@ const Footer = () => {
               Follow Us On Social Media
             </span>
             <div className="flex gap-2 sm:gap-3">
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-colors"
-              >
-                <Linkedin className="w-5 h-5 text-white" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-colors"
-              >
-                <Instagram className="w-5 h-5 text-white" />
-              </a>
-              <a
-                href="#"
-                className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-colors"
-              >
-                <Twitter className="w-5 h-5 text-white" />
-              </a>
+              {(!footerData.social_links || Object.keys(footerData.social_links).length === 0) ? (
+                // Fallback links
+                <>
+                  <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-colors">
+                    <Linkedin className="w-5 h-5 text-white" />
+                  </a>
+                  <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-colors">
+                    <Instagram className="w-5 h-5 text-white" />
+                  </a>
+                  <a href="#" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-colors">
+                    <Twitter className="w-5 h-5 text-white" />
+                  </a>
+                </>
+              ) : (
+                <>
+                  {footerData.social_links.linkedin && (
+                    <a href={footerData.social_links.linkedin} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-colors">
+                      <Linkedin className="w-5 h-5 text-white" />
+                    </a>
+                  )}
+                  {footerData.social_links.instagram && (
+                    <a href={footerData.social_links.instagram} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-colors">
+                      <Instagram className="w-5 h-5 text-white" />
+                    </a>
+                  )}
+                  {footerData.social_links.twitter && (
+                    <a href={footerData.social_links.twitter} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-colors">
+                      <Twitter className="w-5 h-5 text-white" />
+                    </a>
+                  )}
+                  {footerData.social_links.facebook && (
+                    <a href={footerData.social_links.facebook} target="_blank" rel="noreferrer" className="w-10 h-10 rounded-full bg-gray-800 flex items-center justify-center hover:bg-gray-700 transition-colors">
+                      <Facebook className="w-5 h-5 text-white" />
+                    </a>
+                  )}
+                </>
+              )}
             </div>
           </div>
         </div>
@@ -200,9 +260,9 @@ const Footer = () => {
         {/* Bottom Section */}
         <div className="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-2 md:gap-4 text-xs sm:text-sm text-gray-400">
           {/* Copyright (Left) */}
-          <p>@{currentYear} BLACK CUBE SOLUTIONS LLC. All Rights Reserved</p>
+          <p>{footerData.copyright_text || `@${currentYear} BLACK CUBE SOLUTIONS LLC. All Rights Reserved`}</p>
 
-          {/* Legal Links (Right) */}
+          {/* Legal & Custom Links (Right) */}
           <div className="flex flex-wrap justify-center md:justify-end gap-3 md:gap-6">
             <a href="/privacy" onClick={goTo('/privacy')} className="hover:text-white transition-colors">
               Privacy Policy
@@ -213,6 +273,19 @@ const Footer = () => {
             <a href="/cookies" onClick={goTo('/cookies')} className="hover:text-white transition-colors">
               Cookie Policy
             </a>
+            
+            {/* Custom Links */}
+            {footerData.custom_links && footerData.custom_links.map((link, idx) => (
+              <a 
+                key={idx} 
+                href={link.url} 
+                className="hover:text-white transition-colors"
+                target={link.url.startsWith('http') ? '_blank' : '_self'}
+                rel={link.url.startsWith('http') ? 'noreferrer' : ''}
+              >
+                {link.label}
+              </a>
+            ))}
           </div>
         </div>
       </div>

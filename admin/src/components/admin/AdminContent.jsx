@@ -12,6 +12,7 @@ import { ServicesPageCMS } from "./ServicesPageCMS";
 import { ContactPageCMS } from "./ContactPageCMS";
 import { PortfolioPageCMS } from "./PortfolioPageCMS";
 import { CareerPageCMS } from "./CareerPageCMS";
+import { FooterPageCMS } from "./FooterPageCMS";
 export function AdminContent({
   activeTab
 }) {
@@ -521,6 +522,8 @@ export function AdminContent({
       return <PortfolioPageCMS />;
     case 'career-cms':
       return <CareerPageCMS />;
+    case 'footer-cms':
+      return <FooterPageCMS />;
     default:
       return renderDashboard();
   }

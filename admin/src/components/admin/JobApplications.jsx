@@ -18,6 +18,18 @@ export function JobApplications() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedApplication, setSelectedApplication] = useState(null);
+
+  const handleViewApplication = async (application) => {
+    setSelectedApplication(application);
+    if (!application.is_read) {
+      try {
+        await jobApplicationApi.markAsRead(application.id || application._id);
+        setApplications(prev => prev.map(app => (app.id || app._id) === (application.id || application._id) ? { ...app, is_read: true } : app));
+      } catch (err) {
+        console.error('Failed to mark as read', err);
+      }
+    }
+  };
   useEffect(() => {
     loadApplications();
   }, [statusFilter]);
@@ -192,6 +204,7 @@ export function JobApplications() {
                         <p className="text-sm text-primary-gray">{application.appliedDate}</p>
                       </div>
                       {getStatusBadge(application.status)}
+                      {!application.is_read && <Badge className="bg-red-500 border-0">New</Badge>}
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -224,7 +237,7 @@ export function JobApplications() {
                   </div>
 
                   <div className="flex flex-col space-y-2 ml-4">
-                    <Button size="sm" onClick={() => setSelectedApplication(application)} className="group">
+                    <Button size="sm" onClick={() => handleViewApplication(application)} className="group">
                       <Eye className="w-4 h-4 mr-2 group-hover:scale-110 transition-transform" />
                       View Details
                     </Button>

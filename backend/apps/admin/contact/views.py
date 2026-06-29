@@ -12,7 +12,7 @@ class ContactSubmissionListAPIView(generics.ListAPIView):
         serializer = self.get_serializer(queryset, many=True)
         return Response({'success': True, 'data': serializer.data})
 
-class ContactSubmissionDetailAPIView(generics.RetrieveDestroyAPIView):
+class ContactSubmissionDetailAPIView(generics.RetrieveUpdateDestroyAPIView):
     queryset = ContactSubmission.objects.all()
     serializer_class = ContactSubmissionAdminSerializer
 

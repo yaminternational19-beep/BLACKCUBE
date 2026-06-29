@@ -371,6 +371,7 @@ export function CareerPageCMS() {
       type: 'Full-time',
       location: 'Dubai, UAE',
       salary: 'Competitive',
+      experience: '1-3 Years',
       postedDate: new Date().toISOString().split('T')[0],
       description: 'Job description',
       requirements: ['Requirement 1', 'Requirement 2']
@@ -720,10 +721,11 @@ export function CareerPageCMS() {
                       <AdminInput value={job.department} onChange={e => updateJobPosting(job.id, 'department', e.target.value)} placeholder="Department" />
                     </div>
                     
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                       <AdminInput value={job.type} onChange={e => updateJobPosting(job.id, 'type', e.target.value)} placeholder="Job type" />
                       <AdminInput value={job.location} onChange={e => updateJobPosting(job.id, 'location', e.target.value)} placeholder="Location" />
                       <AdminInput value={job.salary} onChange={e => updateJobPosting(job.id, 'salary', e.target.value)} placeholder="Salary range" />
+                      <AdminInput value={job.experience || ''} onChange={e => updateJobPosting(job.id, 'experience', e.target.value)} placeholder="Exp (e.g. 1-3 Years)" />
                     </div>
                     
                     <AdminTextarea value={job.description} onChange={e => updateJobPosting(job.id, 'description', e.target.value)} placeholder="Job description" rows={3} />

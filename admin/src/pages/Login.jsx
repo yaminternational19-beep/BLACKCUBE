@@ -16,6 +16,9 @@ export default function Login() {
       const res = await api.post('/auth/login', { email, password });
       if ((res.data?.success) && res.data?.data?.token) {
         localStorage.setItem('admin_token', res.data.data.token);
+        if (res.data.data.user?.email) {
+          localStorage.setItem('admin_email', res.data.data.user.email);
+        }
         navigate('/');
       } else {
         alert('Invalid credentials');

@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'apps.admin.jobs',
     'apps.admin.contact',
     'apps.admin.pages',
+    'apps.admin.footer',
 
     # Nested Website Apps
     'apps.website.blogs',
@@ -61,6 +62,7 @@ INSTALLED_APPS = [
     'apps.website.jobs',
     'apps.website.contact',
     'apps.website.pages',
+    'apps.website.footer',
 
     # Testing
     'apps.testing',
