@@ -44,19 +44,17 @@ const Footer = () => {
   return (
     <footer className="bg-black text-white py-16 relative overflow-hidden">
       <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black z-0" />
-      <div className="hidden lg:block absolute right-0 lg:right-0 xl:right-15 2xl:right-70 bottom-0 translate-y-0 opacity-[0.03] text-[22rem] xl:text-[28rem] 2xl:text-[32rem] font-bold leading-none pointer-events-none z-0">
-        BC
-      </div>
-
       <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 lg:pr-28">
         {/* Top Section - Logo and Social Media */}
         <div className="flex flex-col md:flex-row items-center md:items-center justify-between gap-6 text-center md:text-left mb-16 pb-8 border-b border-gray-800">
           {/* Logo & Contact Info */}
           <div className="flex flex-col items-center md:items-start gap-4 md:mb-0">
-            <img src="/logo.png" alt="BLACK CUBE SOLUTIONS LLC Logo" className="h-12 w-auto object-contain" />
-            <div className="text-2xl md:text-3xl font-bold">
-              {footerData.company_name || 'BLACK CUBE SOLUTIONS LLC'}
+            <div className="relative overflow-hidden h-[88px] sm:h-[96px] lg:h-[112px] w-[250px] sm:w-[280px] lg:w-[400px]">
+              <img src="logo.png" alt="BLACK CUBE SOLUTIONS LLC" className="h-20 sm:h-20 lg:h-32 w-auto object-contain mix-blend-screen grayscale invert contrast-200 scale-160 origin-left" />
             </div>
+            {/* <div className="text-2xl md:text-3xl font-bold">
+              {footerData.company_name || 'BLACK CUBE SOLUTIONS LLC'}
+            </div> */}
             
             {(footerData.email || footerData.phone || footerData.address) && (
               <div className="flex flex-col items-center md:items-start gap-2 mt-1 text-gray-400 text-sm">

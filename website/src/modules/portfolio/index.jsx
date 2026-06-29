@@ -90,7 +90,7 @@ const PortfolioClient = ({ initialData, initialPortfolioItems }) => {
       <div className="min-h-screen bg-black text-white">
         <section className="relative min-h-screen flex items-center justify-center pt-24 md:pt-28 pb-10 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black" />
-          <div className="absolute right-0 lg:right-0 xl:right-15 2xl:right-70 top-1/2 -translate-y-1/2 opacity-5 text-[14rem] sm:text-[16rem] md:text-[28rem] lg:text-[40rem] font-bold leading-none pointer-events-none">BC</div>
+          <div className="absolute right-0 lg:right-0 xl:right-15 2xl:right-70 top-1/2 -translate-y-1/2 opacity-5 text-[14rem] sm:text-[16rem] md:text-[28rem] lg:text-[40rem] font-bold leading-none pointer-events-none">BCS</div>
           <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 w-full">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-center">
               <motion.div initial={{ opacity: 0, x: -50 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.8 }}>

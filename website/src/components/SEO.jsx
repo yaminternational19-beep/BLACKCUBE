@@ -4,7 +4,7 @@ import { Helmet } from 'react-helmet-async';
 const SEO = ({ title, description, keywords, image, url }) => {
   const defaultTitle = "BlackCube Solutions | Top Software & App Development Dubai";
   const defaultDescription = "Transform your business with BlackCube Solutions. Expert software engineers delivering custom web, mobile app development, and UI/UX design in Dubai, UAE.";
-  const defaultKeywords = "software development dubai, mobile app developers uae, web development company dubai, it outsourcing uae, custom software solutions";
+  const defaultKeywords = "blackcube, black cube, blackcube solutions, black cube solutions, software development dubai, custom software solutions, enterprise solutions";
   const defaultImage = "https://blackcube.ae/images/og-blackcube-home.jpg";
   const siteUrl = "https://blackcube.ae";
 
@@ -41,6 +41,7 @@ const SEO = ({ title, description, keywords, image, url }) => {
               "@type": "Organization",
               "@id": "https://blackcube.ae/#organization",
               "name": "BlackCube Solutions LLC",
+              "alternateName": ["Black Cube", "BlackCube"],
               "url": "https://blackcube.ae/",
               "logo": "https://blackcube.ae/images/logo.png",
               "contactPoint": {

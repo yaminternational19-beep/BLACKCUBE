@@ -184,11 +184,9 @@ const HomeClient = ({ initialData }) => {
       <div className="min-h-screen bg-black text-white overflow-x-hidden">
         <section className="relative min-h-screen flex items-center justify-center pt-20 md:pt-28 pb-10 overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black" />
-          <div className="absolute right-0 right-0 lg:right-0 xl:right-15 2xl:right-70 top-1/2 -translate-y-1/2 opacity-5 text-[14rem] sm:text-[16rem] md:text-[28rem] lg:text-[40rem] font-bold leading-none pointer-events-none">
-            BC
-          </div>
+          <div className="absolute right-0 lg:right-0 xl:right-15 2xl:right-70 top-1/2 -translate-y-1/2 opacity-5 text-[14rem] sm:text-[16rem] md:text-[28rem] lg:text-[40rem] font-bold leading-none pointer-events-none">BCS</div>
 
-          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12 w-full">
+          <div className="relative z-10 max-w-[1440px] mx-auto px-6 lg:px-12 w-full">
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 md:gap-16 items-center">
               <motion.div
                 initial={{ opacity: 0, x: -50 }}
@@ -237,7 +235,7 @@ const HomeClient = ({ initialData }) => {
         {/* Reasons Section */}
         <section id="reasons" className="py-24 bg-[#1A1A1A] relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-bl from-black via-gray-900 to-black pointer-events-none" />
-          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
+          <div className="relative z-10 max-w-[1440px] mx-auto px-6 lg:px-12">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -248,7 +246,7 @@ const HomeClient = ({ initialData }) => {
                 {headings.reasonsTitlePrefix}{" "}
                 <span className="text-gray-400">{headings.reasonsTitleHighlight}</span>
               </h2>
-              <h3 className="text-3xl md:text-4xl font-semibold text-gray-300 mb-6">
+              <h3 className="text-base md:text-lg font-semibold text-gray-400 mb-6">
                 {headings.reasonsTitleLine2}
               </h3>
               <p className="text-gray-400 max-w-3xl mx-auto leading-relaxed">
@@ -277,9 +275,9 @@ const HomeClient = ({ initialData }) => {
                     <p className="text-gray-400 text-sm leading-relaxed">
                       {reason.desc}
                     </p>
-                    <button className="mt-6 text-sm flex items-center text-gray-400 hover:text-white transition-all">
+                    {/* <button className="mt-6 text-sm flex items-center text-gray-400 hover:text-white transition-all">
                       Learn More <ArrowRight className="ml-2 w-4 h-4" />
-                    </button>
+                    </button> */}
                   </Card>
                 </motion.div>
               )}
@@ -289,7 +287,7 @@ const HomeClient = ({ initialData }) => {
 
         <section id="services" className="bg-black text-white py-16 px-6 md:px-20 relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black pointer-events-none" />
-          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
+          <div className="relative z-10 max-w-[1440px] mx-auto px-6 lg:px-12">
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -383,7 +381,7 @@ const HomeClient = ({ initialData }) => {
         {/* Testimonials */}
         <section id="testimonials" className="py-20 bg-black text-white relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black pointer-events-none" />
-          <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
+          <div className="relative z-10 max-w-[1440px] mx-auto px-6 lg:px-12">
             <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
               <h2 className="text-4xl md:text-5xl font-extrabold mb-3">
                 {headings.testimonialsTitlePrefix}{" "}
@@ -422,7 +420,7 @@ const HomeClient = ({ initialData }) => {
         {/* Clients Section */}
         {clients && clients.length > 0 && (
           <section id="clients" className="py-20 bg-[#0a0a0a] text-white relative overflow-hidden">
-            <div className="relative z-10 max-w-7xl mx-auto px-6 lg:px-12">
+            <div className="relative z-10 max-w-[1440px] mx-auto px-6 lg:px-12">
               <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
                 <h2 className="text-3xl md:text-5xl font-bold mb-3">
                   {headings.clientsTitlePrefix}{" "}

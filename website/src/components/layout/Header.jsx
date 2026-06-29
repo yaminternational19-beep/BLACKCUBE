@@ -64,9 +64,9 @@ const Header = () => {
             {/* Logo */}
             <Link
               to="/"
-              className="flex items-center space-x-3 group relative z-50"
+              className="flex items-center space-x-3 group relative z-50 overflow-hidden h-[80px] lg:h-[96px] w-[250px] sm:w-[280px] lg:w-[400px]"
             >
-              <img src="/logo.png" alt="BLACK CUBE SOLUTIONS LLC" className="h-10 w-auto object-contain" />
+              <img src="logo.png" alt="BLACK CUBE SOLUTIONS LLC" className="h-20 sm:h-20 lg:h-32 w-auto object-contain mix-blend-screen grayscale invert contrast-200 scale-160 origin-left" />
               {/* <div className="text-xl md:text-2xl font-bold tracking-tighter text-white hidden sm:block">
                 BLACKCUBE SOLUTIONS LLC
               </div> */}

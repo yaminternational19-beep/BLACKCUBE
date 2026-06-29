@@ -1,8 +1,10 @@
 'use client';
 
+import { useState, useEffect } from "react";
 import { useContent } from "@/contexts/ContentContext";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
-import { FileText, Image, Type, BarChart3 } from "lucide-react";
+import { FileText, Image, Type, BarChart3, Users, Briefcase, Activity, CheckCircle, Clock } from "lucide-react";
+import { notificationsApi, contactSubmissionApi, jobApplicationApi } from "@/api";
 import { useToast } from "@/hooks/use-toast";
 import { ContactManagement } from "./ContactManagement";
 import { JobApplications } from "./JobApplications";
@@ -14,7 +16,8 @@ import { PortfolioPageCMS } from "./PortfolioPageCMS";
 import { CareerPageCMS } from "./CareerPageCMS";
 import { FooterPageCMS } from "./FooterPageCMS";
 export function AdminContent({
-  activeTab
+  activeTab,
+  onTabChange
 }) {
   const {
     content,
@@ -26,6 +29,55 @@ export function AdminContent({
   const {
     toast
   } = useToast();
+
+  const [stats, setStats] = useState({
+    unreadContacts: 0,
+    unreadJobs: 0,
+    totalContacts: 0,
+    totalJobs: 0,
+    isHealthy: true
+  });
+
+  useEffect(() => {
+    if (activeTab === 'dashboard') {
+      const fetchDashboardStats = async () => {
+        try {
+          const [countsRes, contactsRes, jobsRes] = await Promise.all([
+            notificationsApi.getUnreadCounts(),
+            contactSubmissionApi.list(),
+            jobApplicationApi.list()
+          ]);
+          
+          const extractCount = (res) => {
+            if (res.success && res.data) {
+              if (res.data.count !== undefined) return res.data.count;
+              if (Array.isArray(res.data)) return res.data.length;
+              if (res.data.results && Array.isArray(res.data.results)) return res.data.results.length;
+            } else if (Array.isArray(res)) {
+              return res.length;
+            } else if (res.count !== undefined) {
+              return res.count;
+            } else if (res.results && Array.isArray(res.results)) {
+              return res.results.length;
+            }
+            return 0;
+          };
+
+          setStats({
+            unreadContacts: countsRes.success ? countsRes.data.contact_submissions : 0,
+            unreadJobs: countsRes.success ? countsRes.data.job_applications : 0,
+            totalContacts: extractCount(contactsRes),
+            totalJobs: extractCount(jobsRes),
+            isHealthy: true
+          });
+        } catch (err) {
+          console.error("Failed to fetch dashboard stats", err);
+          setStats(prev => ({ ...prev, isHealthy: false }));
+        }
+      };
+      fetchDashboardStats();
+    }
+  }, [activeTab]);
 
   // Content is already loaded via initialContent or can be loaded on-demand
   // Removing the loop that was causing re-render freezes
@@ -60,56 +112,126 @@ export function AdminContent({
         return <Type className="w-4 h-4" />;
     }
   };
-  const renderDashboard = () => <div className="space-y-6">
+  const renderDashboard = () => <div className="space-y-8">
       <div>
         <h2 className="text-3xl font-bold text-primary mb-2">Dashboard</h2>
         <p className="text-muted-foreground">Overview of your website content and analytics</p>
       </div>
 
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        <Card hover className="p-6">
+        {/* Unread Alerts */}
+        <Card hover className="p-6 cursor-pointer border-l-4 border-l-red-500 hover:bg-primary-blue/5 transition-colors" onClick={() => onTabChange && onTabChange('users')}>
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">CMS</CardTitle>
-            <FileText className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">New Inquiries</CardTitle>
+            <Users className="h-4 w-4 text-red-500" />
           </CardHeader>
           <CardContent>
-            {/* <div className="text-2xl font-bold text-primary">{content.length}</div> */}
-            <p className="text-xs text-muted-foreground">Active content pages</p>
+            <div className="text-2xl font-bold text-red-500">{stats.unreadContacts}</div>
+            <p className="text-xs text-muted-foreground">Unread submissions</p>
+          </CardContent>
+        </Card>
+
+        <Card hover className="p-6 cursor-pointer border-l-4 border-l-red-500 hover:bg-primary-blue/5 transition-colors" onClick={() => onTabChange && onTabChange('job-applications')}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">New Applications</CardTitle>
+            <Briefcase className="h-4 w-4 text-red-500" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-red-500">{stats.unreadJobs}</div>
+            <p className="text-xs text-muted-foreground">Unread applications</p>
+          </CardContent>
+        </Card>
+
+        {/* Total Stats */}
+        <Card hover className="p-6">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Submissions</CardTitle>
+            <BarChart3 className="h-4 w-4 text-primary-blue" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-primary-blue">{stats.totalContacts}</div>
+            <p className="text-xs text-muted-foreground">All time contact inquiries</p>
           </CardContent>
         </Card>
 
         <Card hover className="p-6">
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Content Fields</CardTitle>
-            <Type className="h-4 w-4 text-muted-foreground" />
+            <CardTitle className="text-sm font-medium">Total Applications</CardTitle>
+            <FileText className="h-4 w-4 text-primary-purple" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-primary">
-              {content.reduce((total, page) => total + page.fields.length, 0)}
+            <div className="text-2xl font-bold text-primary-purple">{stats.totalJobs}</div>
+            <p className="text-xs text-muted-foreground">All time job applications</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid gap-6 md:grid-cols-2">
+        {/* Quick Actions */}
+        <Card className="p-6">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <Activity className="h-5 w-5 text-primary-blue" />
+              Quick Actions
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="grid grid-cols-2 gap-4">
+            <button onClick={() => onTabChange && onTabChange('home')} className="flex flex-col items-center justify-center p-4 rounded-xl border border-border bg-card hover:bg-primary-blue/10 transition-colors">
+              <Image className="h-6 w-6 text-primary-gray mb-2" />
+              <span className="text-sm font-medium">Edit Home Page</span>
+            </button>
+            <button onClick={() => onTabChange && onTabChange('services')} className="flex flex-col items-center justify-center p-4 rounded-xl border border-border bg-card hover:bg-primary-blue/10 transition-colors">
+              <FileText className="h-6 w-6 text-primary-gray mb-2" />
+              <span className="text-sm font-medium">Update Services</span>
+            </button>
+            <button onClick={() => onTabChange && onTabChange('career')} className="flex flex-col items-center justify-center p-4 rounded-xl border border-border bg-card hover:bg-primary-blue/10 transition-colors">
+              <Briefcase className="h-6 w-6 text-primary-gray mb-2" />
+              <span className="text-sm font-medium">Manage Careers</span>
+            </button>
+            <button onClick={() => onTabChange && onTabChange('users')} className="flex flex-col items-center justify-center p-4 rounded-xl border border-border bg-card hover:bg-primary-blue/10 transition-colors">
+              <Users className="h-6 w-6 text-primary-gray mb-2" />
+              <span className="text-sm font-medium">View Contacts</span>
+            </button>
+          </CardContent>
+        </Card>
+
+        {/* System Status */}
+        <Card className="p-6">
+          <CardHeader className="pb-4">
+            <CardTitle className="text-lg flex items-center gap-2">
+              <CheckCircle className="h-5 w-5 text-success" />
+              System Status
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-6">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className={`h-3 w-3 rounded-full ${stats.isHealthy ? 'bg-success' : 'bg-red-500'}`} />
+                <span className="font-medium">Backend API</span>
+              </div>
+              <span className="text-sm text-muted-foreground">{stats.isHealthy ? 'Online' : 'Offline'}</span>
             </div>
-            <p className="text-xs text-muted-foreground">Editable content fields</p>
-          </CardContent>
-        </Card>
-
-        <Card hover className="p-6">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Last Updated</CardTitle>
-            <BarChart3 className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-primary">Today</div>
-            <p className="text-xs text-muted-foreground">Recent changes made</p>
-          </CardContent>
-        </Card>
-
-        <Card hover className="p-6">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Status</CardTitle>
-            <div className="h-2 w-2 bg-success rounded-full" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-success">Live</div>
-            <p className="text-xs text-muted-foreground">Site is published</p>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="h-3 w-3 rounded-full bg-success" />
+                <span className="font-medium">Database</span>
+              </div>
+              <span className="text-sm text-muted-foreground">Connected</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="h-3 w-3 rounded-full bg-success" />
+                <span className="font-medium">Website Frontend</span>
+              </div>
+              <span className="text-sm text-muted-foreground">Live</span>
+            </div>
+            <div className="flex items-center justify-between">
+              <div className="flex items-center gap-3">
+                <div className="h-3 w-3 rounded-full bg-success" />
+                <span className="font-medium">Last Sync</span>
+              </div>
+              <span className="text-sm text-muted-foreground">Just now</span>
+            </div>
           </CardContent>
         </Card>
       </div>

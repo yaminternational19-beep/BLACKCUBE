@@ -29,7 +29,7 @@ export default function AdminLayout({
           
           {/* Scrollable Main Content */}
           <main className="flex-1 p-6 overflow-auto mt-16 min-w-0">
-            <AdminContent key={activeTab} activeTab={activeTab} />
+            <AdminContent key={activeTab} activeTab={activeTab} onTabChange={setActiveTab} />
           </main>
         </div>
       </div>
