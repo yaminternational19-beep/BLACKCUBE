@@ -83,7 +83,7 @@ export function AdminSidebar({
       }
     };
     fetchCounts();
-    const interval = setInterval(fetchCounts, 5000);
+    const interval = setInterval(fetchCounts, 5 * 60 * 1000); // Poll every 5 minutes
     return () => clearInterval(interval);
   }, []);
   return <Sidebar className={cn("border-r border-border transition-all duration-300 h-screen flex flex-col", isCollapsed ? "w-16" : "w-64")} collapsible="icon">

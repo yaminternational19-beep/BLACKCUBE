@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import {
-  Zap, ExternalLink, Filter, Search, X, Calendar, Users, CheckCircle2, ChevronRight, LayoutTemplate } from
+  Zap, ExternalLink, Filter, Search, X, Calendar, Users, CheckCircle2, ChevronRight, LayoutTemplate, Globe, Smartphone } from
 'lucide-react';
 import { Link } from 'react-router-dom';
 import SEO from '@/components/SEO';
@@ -203,7 +203,7 @@ const PortfolioClient = ({ initialData, initialPortfolioItems }) => {
                     <Card hover className="h-full group">
                       <div className="aspect-video rounded-2xl mb-6 relative overflow-hidden">
                         <img src={getAssetUrl(item.image) || '/placeholder.svg'} alt={item.title} className="w-full h-full object-cover rounded-2xl transition-transform group-hover:scale-105" loading="lazy" />
-                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><Button size="sm" onClick={() => setExpandedId(item.id)}>View Project <ExternalLink className="ml-2 w-4 h-4" /></Button></div>
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><Button size="sm" onClick={() => setExpandedId(item.id)}>View Details <ChevronRight className="ml-2 w-4 h-4" /></Button></div>
                       </div>
                       <div className="space-y-4">
                         <div className="flex items-center justify-between"><span className="px-3 py-1 bg-[#0f0f0f] text-gray-300 text-xs rounded-full ring-1 ring-white/10">{item.category}</span>{item.featured && <span className="px-3 py-1 bg-yellow-500/20 text-yellow-400 text-xs rounded-full ring-1 ring-yellow-500/30">Featured</span>}</div>
@@ -313,6 +313,32 @@ const PortfolioClient = ({ initialData, initialPortfolioItems }) => {
                                     {project.technologies.map((tech, idx) => (
                                       <span key={idx} className="px-2 py-1 bg-white/5 text-gray-300 text-xs rounded">{tech}</span>
                                     ))}
+                                  </div>
+                                </div>
+                              )}
+
+                              {(project.website_url || project.app_store_url || project.google_store_url) && (
+                                <div className="pt-4 border-t border-white/5">
+                                  <p className="text-gray-500 text-xs uppercase tracking-wider font-semibold mb-3">Project Links</p>
+                                  <div className="flex flex-col gap-3">
+                                    {project.website_url && (
+                                      <a href={project.website_url} target="_blank" rel="noopener noreferrer" className="flex items-center text-white hover:text-primary-blue transition-colors text-sm font-medium">
+                                        <Globe className="w-4 h-4 mr-3 text-primary-blue" />
+                                        Visit Website
+                                      </a>
+                                    )}
+                                    {project.app_store_url && (
+                                      <a href={project.app_store_url} target="_blank" rel="noopener noreferrer" className="flex items-center text-white hover:text-primary-blue transition-colors text-sm font-medium">
+                                        <Smartphone className="w-4 h-4 mr-3 text-primary-blue" />
+                                        App Store
+                                      </a>
+                                    )}
+                                    {project.google_store_url && (
+                                      <a href={project.google_store_url} target="_blank" rel="noopener noreferrer" className="flex items-center text-white hover:text-primary-blue transition-colors text-sm font-medium">
+                                        <Smartphone className="w-4 h-4 mr-3 text-primary-blue" />
+                                        Google Play
+                                      </a>
+                                    )}
                                   </div>
                                 </div>
                               )}

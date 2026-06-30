@@ -4,6 +4,6 @@ from .models import PortfolioItem
 from .serializers import PortfolioItemSerializer
 
 class PortfolioItemViewSet(viewsets.ModelViewSet):
-    queryset = PortfolioItem.objects.all().order_by('-created_at')
+    queryset = PortfolioItem.objects.select_related('category').prefetch_related('technologies', 'methods', 'team_members__role').all().order_by('-created_at')
     serializer_class = PortfolioItemSerializer
     permission_classes = [IsAuthenticatedOrReadOnly]

@@ -17,7 +17,8 @@ class PortfolioItemSerializer(serializers.ModelSerializer):
         model = PortfolioItem
         fields = [
             'id', 'title', 'description', 'category', 'technologies', 'client', 
-            'link', 'image', 'featured', 'coverImage', 'timeTaken', 
+            'app_store_url', 'google_store_url', 'website_url',
+            'image', 'featured', 'coverImage', 'timeTaken', 
             'startDate', 'completedDate', 'methods', 'team',
             'created_at', 'updated_at'
         ]

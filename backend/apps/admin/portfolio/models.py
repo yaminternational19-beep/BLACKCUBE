@@ -29,7 +29,9 @@ class PortfolioItem(models.Model):
     technologies = models.ManyToManyField(Technology, blank=True, related_name='portfolio_items')
     
     client = models.CharField(max_length=255, blank=True, default='')
-    link = models.CharField(max_length=500, blank=True, default='')
+    app_store_url = models.CharField(max_length=500, blank=True, default='')
+    google_store_url = models.CharField(max_length=500, blank=True, default='')
+    website_url = models.CharField(max_length=500, blank=True, default='')
     image = models.CharField(max_length=500, blank=True, default='')
     featured = models.BooleanField(default=False)
     coverImage = models.CharField(max_length=500, blank=True, default='')

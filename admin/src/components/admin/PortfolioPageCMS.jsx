@@ -225,10 +225,10 @@ export function PortfolioPageCMS() {
       };
       await pageApi.update('portfolio', pageData);
 
-      // Save portfolio items: new items (numeric id) are created, existing items (string id) are updated
+      // Save portfolio items: new items ('new_' prefix) are created, existing items are updated
       for (const item of portfolioItems) {
         if (!item.id) continue;
-        const isNewItem = typeof item.id === 'number';
+        const isNewItem = String(item.id).startsWith('new_');
         try {
           if (isNewItem) {
             // New item: remove numeric id before sending, let backend generate _id
@@ -254,6 +254,21 @@ export function PortfolioPageCMS() {
         title: "Success!",
         description: "Portfolio page content and items saved successfully to database."
       });
+      
+      // Refresh portfolio items so newly created items get their real database IDs
+      try {
+        const portfolioResponse = await portfolioApi.list();
+        if (portfolioResponse.success && portfolioResponse.data) {
+          const normalizedItems = portfolioResponse.data.map(item => ({
+            ...item,
+            id: item._id || item.id
+          }));
+          setPortfolioItems(normalizedItems);
+        }
+      } catch (err) {
+        console.error('Failed to refresh portfolio items:', err);
+      }
+
       setTimeout(() => setSaveStatus('idle'), 2000);
     } catch (error) {
       console.error('Failed to save portfolio page:', error);
@@ -280,16 +295,18 @@ export function PortfolioPageCMS() {
   };
   const deleteFeature = index => setKeyFeatures(keyFeatures.filter((_, i) => i !== index));
   const addPortfolioItem = () => {
-    // Use numeric ID for new items (will be converted when saved)
+    // Use 'new_' prefix for new items (will be removed when saved)
     const newItem = {
-      id: Date.now(),
-      // Numeric ID marks this as a new unsaved item
+      id: `new_${Date.now()}`,
+      // 'new_' prefix marks this as a new unsaved item
       title: 'New Project',
       description: 'Project description',
       category: 'Web Development',
       technologies: ['React'],
       client: 'Client Name',
-      link: '#',
+      app_store_url: '',
+      google_store_url: '',
+      website_url: '',
       featured: false,
       image: 'https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?auto=format&fit=crop&w=1200&q=60',
       coverImage: '',
@@ -331,8 +348,8 @@ export function PortfolioPageCMS() {
   };
   const deletePortfolioItem = async id => {
     try {
-      // If it's an existing item (string ID from MongoDB), delete from database
-      if (typeof id === 'string') {
+      // If it's an existing item (no 'new_' prefix), delete from database
+      if (!String(id).startsWith('new_')) {
         const response = await portfolioApi.delete(id);
         if (!response.success) {
           toast({
@@ -620,7 +637,12 @@ export function PortfolioPageCMS() {
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <AdminInput value={item.client} onChange={e => updatePortfolioItem(item.id, 'client', e.target.value)} placeholder="Client name" />
-                    <AdminInput value={item.link} onChange={e => updatePortfolioItem(item.id, 'link', e.target.value)} placeholder="Project URL" />
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-4">
+                    <AdminInput value={item.app_store_url || ''} onChange={e => updatePortfolioItem(item.id, 'app_store_url', e.target.value)} placeholder="App Store URL (Optional)" />
+                    <AdminInput value={item.google_store_url || ''} onChange={e => updatePortfolioItem(item.id, 'google_store_url', e.target.value)} placeholder="Google Store URL (Optional)" />
+                    <AdminInput value={item.website_url || ''} onChange={e => updatePortfolioItem(item.id, 'website_url', e.target.value)} placeholder="Website URL (Optional)" />
                   </div>
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
