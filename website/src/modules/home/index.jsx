@@ -360,7 +360,7 @@ const HomeClient = ({ initialData }) => {
                       {work.image &&
                     <img src={getAssetUrl(work.image)} alt={work.title} className="absolute inset-0 w-full h-full object-cover opacity-70" loading="lazy" />
                     }
-                      <Link to='/portfolio' className="absolute bottom-5 px-5 py-2 rounded-full bg-[#101010] ring-1 ring-white/10 text-gray-300 text-sm backdrop-blur-sm hover:bg-[#161616] transition-all duration-300">
+                      <Link to={`/portfolio?projectTitle=${encodeURIComponent(work.title)}`} className="absolute bottom-5 px-5 py-2 rounded-full bg-[#101010] ring-1 ring-white/10 text-gray-300 text-sm backdrop-blur-sm hover:bg-[#161616] transition-all duration-300">
                         View Projects Details →
                       </Link>
                     </div>

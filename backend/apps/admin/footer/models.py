@@ -2,7 +2,7 @@ from django.db import models
 
 class Footer(models.Model):
     company_name = models.CharField(max_length=255, blank=True, null=True)
-    email = models.EmailField(blank=True, null=True)
+    email = models.CharField(max_length=255, blank=True, null=True)
     phone = models.CharField(max_length=50, blank=True, null=True)
     address = models.TextField(blank=True, null=True)
     social_links = models.JSONField(default=dict, blank=True)

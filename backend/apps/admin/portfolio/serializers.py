@@ -20,7 +20,7 @@ class PortfolioItemSerializer(serializers.ModelSerializer):
             'app_store_url', 'google_store_url', 'website_url',
             'image', 'featured', 'coverImage', 'timeTaken', 
             'startDate', 'completedDate', 'methods', 'team',
-            'created_at', 'updated_at'
+            'created_at', 'updated_at', 'index_value'
         ]
 
     def to_representation(self, instance):

@@ -1,12 +1,12 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import {
   Zap, ExternalLink, Filter, Search, X, Calendar, Users, CheckCircle2, ChevronRight, LayoutTemplate, Globe, Smartphone } from
 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import SEO from '@/components/SEO';
 import Layout from '@/components/layout/Layout';
 import Button from '@/components/ui/Button';
@@ -33,6 +33,33 @@ const PortfolioClient = ({ initialData, initialPortfolioItems }) => {
   const [keyFeaturesSection, setKeyFeaturesSection] = useState({ title: '', subtitle: '' });
   const [techList, setTechList] = useState([]);
   const [portfolioItems, setPortfolioItems] = useState([]);
+  const [featuredIndex, setFeaturedIndex] = useState(0);
+
+  const location = useLocation();
+
+  useEffect(() => {
+    if (portfolioItems.length > 0) {
+      const searchParams = new URLSearchParams(location.search);
+      const projectTitle = searchParams.get('projectTitle');
+      if (projectTitle) {
+        const project = portfolioItems.find(p => p.title === projectTitle);
+        if (project) {
+          setExpandedId(project.id);
+        }
+      }
+    }
+  }, [location.search, portfolioItems]);
+
+  const featuredProjects = portfolioItems.filter(p => p.featured);
+
+  useEffect(() => {
+    if (featuredProjects.length > 1) {
+      const interval = setInterval(() => {
+        setFeaturedIndex(prev => (prev + 1) % featuredProjects.length);
+      }, 2000);
+      return () => clearInterval(interval);
+    }
+  }, [featuredProjects.length]);
 
   useEffect(() => {
     const processPageData = (data) => {
@@ -126,54 +153,65 @@ const PortfolioClient = ({ initialData, initialPortfolioItems }) => {
 
         
         {/* Featured Section */}
-        {featuredSection && featuredProjectId && portfolioItems.find(p => p.id === featuredProjectId) && (
+        {featuredProjects.length > 0 && (
           <section className="py-20 bg-[#0a0a0a] relative overflow-hidden">
             <div className="absolute inset-0 bg-gradient-to-tr from-black via-gray-900 to-black pointer-events-none" />
             <div className="relative max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
               <div className="text-center mb-16">
-                <h2 className="text-4xl md:text-5xl font-bold text-white mb-3">{featuredSection.title || "Featured Project"}</h2>
-                <p className="text-gray-400 max-w-3xl mx-auto leading-relaxed">{featuredSection.description || "Take a closer look at our most recent success story."}</p>
+                <h2 className="text-4xl md:text-5xl font-bold text-white mb-3">Featured Success Stories</h2>
+                <p className="text-gray-400 max-w-3xl mx-auto leading-relaxed">Explore our most impactful projects, showcasing innovative solutions, modern technologies, and measurable results delivered for clients across diverse industries.</p>
               </div>
               
-              <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
-                {(() => {
-                  const fp = portfolioItems.find(p => p.id === featuredProjectId);
-                  return (
-                    <Card className="bg-[#111] border-0 ring-1 ring-white/10 overflow-hidden rounded-3xl p-0">
-                      <div className="grid grid-cols-1 lg:grid-cols-2">
-                        <div className="h-64 lg:h-auto min-h-[400px] relative">
-                          <img src={getAssetUrl(fp.coverImage) || getAssetUrl(fp.image) || '/placeholder.svg'} alt={fp.title} className="absolute inset-0 w-full h-full object-cover" />
-                          <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent lg:bg-gradient-to-r lg:from-black/80 lg:to-transparent" />
-                          <div className="absolute bottom-6 left-6 right-6">
-                            <span className="px-3 py-1 bg-primary-blue text-white text-xs font-bold rounded-full uppercase tracking-wider">{fp.category}</span>
-                          </div>
-                        </div>
-                        <div className="p-8 lg:p-12 flex flex-col justify-center">
-                          <h3 className="text-3xl font-bold text-white mb-4">{fp.title}</h3>
-                          <p className="text-gray-300 leading-relaxed mb-8">{fp.description}</p>
-                          
-                          <div className="grid grid-cols-2 gap-6 mb-8">
-                            {fp.client && (
-                              <div>
-                                <p className="text-gray-500 text-sm mb-1 uppercase tracking-wider font-semibold">Client</p>
-                                <p className="text-white">{fp.client}</p>
+              <div className="relative overflow-hidden">
+                <AnimatePresence mode="wait">
+                  {(() => {
+                    const fp = featuredProjects[featuredIndex] || featuredProjects[0];
+                    return (
+                      <motion.div 
+                        key={fp.id}
+                        initial={{ opacity: 0, x: 20 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -20 }}
+                        transition={{ duration: 0.5 }}
+                        className="w-full"
+                      >
+                        <Card className="bg-[#111] border-0 ring-1 ring-white/10 overflow-hidden rounded-3xl p-0">
+                          <div className="grid grid-cols-1 lg:grid-cols-2">
+                            <div className="h-64 lg:h-auto min-h-[400px] relative">
+                              <img src={getAssetUrl(fp.coverImage) || getAssetUrl(fp.image) || '/placeholder.svg'} alt={fp.title} className="absolute inset-0 w-full h-full object-cover" />
+                              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent lg:bg-gradient-to-r lg:from-black/80 lg:to-transparent" />
+                              <div className="absolute bottom-6 left-6 right-6">
+                                <span className="px-3 py-1 bg-primary-blue text-white text-xs font-bold rounded-full uppercase tracking-wider">{fp.category}</span>
                               </div>
-                            )}
-                            {fp.duration && (
-                              <div>
-                                <p className="text-gray-500 text-sm mb-1 uppercase tracking-wider font-semibold">Duration</p>
-                                <p className="text-white flex items-center"><Calendar className="w-4 h-4 mr-2 text-primary-blue" />{fp.duration}</p>
+                            </div>
+                            <div className="p-8 lg:p-12 flex flex-col justify-center">
+                              <h3 className="text-3xl font-bold text-white mb-4">{fp.title}</h3>
+                              <p className="text-gray-300 leading-relaxed mb-8">{fp.description}</p>
+                              
+                              <div className="grid grid-cols-2 gap-6 mb-8">
+                                {fp.client && (
+                                  <div>
+                                    <p className="text-gray-500 text-sm mb-1 uppercase tracking-wider font-semibold">Client</p>
+                                    <p className="text-white">{fp.client}</p>
+                                  </div>
+                                )}
+                                {fp.duration && (
+                                  <div>
+                                    <p className="text-gray-500 text-sm mb-1 uppercase tracking-wider font-semibold">Duration</p>
+                                    <p className="text-white flex items-center"><Calendar className="w-4 h-4 mr-2 text-primary-blue" />{fp.duration}</p>
+                                  </div>
+                                )}
                               </div>
-                            )}
+                              
+                              <Button onClick={() => setExpandedId(fp.id)} className="w-fit">View Full Case Study <ChevronRight className="ml-2 w-4 h-4" /></Button>
+                            </div>
                           </div>
-                          
-                          <Button onClick={() => setExpandedId(fp.id)} className="w-fit">View Full Case Study <ChevronRight className="ml-2 w-4 h-4" /></Button>
-                        </div>
-                      </div>
-                    </Card>
-                  );
-                })()}
-              </motion.div>
+                        </Card>
+                      </motion.div>
+                    );
+                  })()}
+                </AnimatePresence>
+              </div>
             </div>
           </section>
         )}
@@ -203,7 +241,7 @@ const PortfolioClient = ({ initialData, initialPortfolioItems }) => {
                     <Card hover className="h-full group">
                       <div className="aspect-video rounded-2xl mb-6 relative overflow-hidden">
                         <img src={getAssetUrl(item.image) || '/placeholder.svg'} alt={item.title} className="w-full h-full object-cover rounded-2xl transition-transform group-hover:scale-105" loading="lazy" />
-                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><Button size="sm" onClick={() => setExpandedId(item.id)}>View Details <ChevronRight className="ml-2 w-4 h-4" /></Button></div>
+                        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"><Button size="sm" className="!bg-black !bg-none !text-white border !border-black hover:!bg-gray-900 shadow-none" onClick={() => setExpandedId(item.id)}>View Details <ChevronRight className="ml-2 w-4 h-4" /></Button></div>
                       </div>
                       <div className="space-y-4">
                         <div className="flex items-center justify-between"><span className="px-3 py-1 bg-[#0f0f0f] text-gray-300 text-xs rounded-full ring-1 ring-white/10">{item.category}</span>{item.featured && <span className="px-3 py-1 bg-yellow-500/20 text-yellow-400 text-xs rounded-full ring-1 ring-yellow-500/30">Featured</span>}</div>

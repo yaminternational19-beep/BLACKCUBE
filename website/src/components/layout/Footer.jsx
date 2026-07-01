@@ -128,7 +128,7 @@ const Footer = () => {
         </div>
 
         {/* Middle Section - Navigation Links */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 md:gap-12 mb-12">
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 md:gap-12 mb-12">
           {/* Home Column */}
           <div>
             <h3 className="font-bold text-white mb-4">Home</h3>
@@ -268,9 +268,9 @@ const Footer = () => {
             <a href="/terms" onClick={goTo('/terms')} className="hover:text-white transition-colors">
               Terms & Conditions
             </a>
-            <a href="/cookies" onClick={goTo('/cookies')} className="hover:text-white transition-colors">
+            {/* <a href="/cookies" onClick={goTo('/cookies')} className="hover:text-white transition-colors">
               Cookie Policy
-            </a>
+            </a> */}
             
             {/* Custom Links */}
             {footerData.custom_links && footerData.custom_links.map((link, idx) => (

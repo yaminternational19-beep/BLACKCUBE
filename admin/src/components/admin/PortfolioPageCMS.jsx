@@ -314,7 +314,8 @@ export function PortfolioPageCMS() {
       startDate: '',
       completedDate: '',
       methods: [],
-      team: []
+      team: [],
+      index_value: 0
     };
     setPortfolioItems(prevItems => [...prevItems, newItem]);
   };
@@ -628,9 +629,10 @@ export function PortfolioPageCMS() {
                     </div>
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <AdminInput value={item.title} onChange={e => updatePortfolioItem(item.id, 'title', e.target.value)} placeholder="Project title" />
                     <AdminInput value={item.category} onChange={e => updatePortfolioItem(item.id, 'category', e.target.value)} placeholder="Category" />
+                    <AdminInput type="number" value={item.index_value ?? 0} onChange={e => updatePortfolioItem(item.id, 'index_value', parseInt(e.target.value, 10) || 0)} placeholder="Index (0, 1, 2...)" />
                   </div>
 
                   <AdminTextarea value={item.description} onChange={e => updatePortfolioItem(item.id, 'description', e.target.value)} placeholder="Project description" rows={2} />

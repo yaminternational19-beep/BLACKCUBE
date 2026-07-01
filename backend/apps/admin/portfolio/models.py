@@ -41,6 +41,11 @@ class PortfolioItem(models.Model):
     
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
+    
+    index_value = models.IntegerField(default=0, help_text="Used to order the portfolio items on the website (e.g. 0, 1, 2, 3)")
+
+    class Meta:
+        ordering = ['index_value', '-created_at']
 
     def __str__(self):
         return self.title
