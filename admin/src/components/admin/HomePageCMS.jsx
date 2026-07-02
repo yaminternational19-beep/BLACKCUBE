@@ -456,27 +456,28 @@ export function HomePageCMS() {
     description: "Short description"
   }]);
   const deleteClient = id => setClients(prev => prev.filter(c => c.id !== id));
-  return <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-white">Home Page CMS</h2>
-        <Button onClick={handleSave} className="group" disabled={loading || saveStatus === 'saving'}>
-          <Save className="w-4 h-4 mr-2" />
-          {saveStatus === 'saving' ? 'Saving...' : saveStatus === 'success' ? 'Saved!' : saveStatus === 'error' ? 'Error' : 'Save Changes'}
-        </Button>
-      </div>
-
-      <Tabs defaultValue="hero" className="w-full">
-        <TabsList className="flex w-full overflow-x-auto justify-start hide-scrollbar gap-2 p-1 bg-primary-slate/30 rounded-xl mb-6">
-          <TabsTrigger value="hero">Hero</TabsTrigger>
-          <TabsTrigger value="services">Services</TabsTrigger>
-          <TabsTrigger value="reasons">Reasons</TabsTrigger>
-          <TabsTrigger value="works">Works</TabsTrigger>
-          <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
-          <TabsTrigger value="faqs">FAQs</TabsTrigger>
-          <TabsTrigger value="clients">Clients</TabsTrigger>
-          <TabsTrigger value="headings">Section Headings</TabsTrigger>
-          <TabsTrigger value="final-cta">Final CTA</TabsTrigger>
-        </TabsList>
+  return <div className="space-y-6 relative">
+      <Tabs defaultValue="hero" className="w-full relative">
+        <div className="sticky top-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-md -mx-6 px-6 pt-6 pb-4 border-b border-white/10 shadow-2xl -mt-6 mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold text-white">Home Page CMS</h2>
+            <Button onClick={handleSave} className="group" disabled={loading || saveStatus === 'saving'}>
+              <Save className="w-4 h-4 mr-2" />
+              {saveStatus === 'saving' ? 'Saving...' : saveStatus === 'success' ? 'Saved!' : saveStatus === 'error' ? 'Error' : 'Save Changes'}
+            </Button>
+          </div>
+          <TabsList className="flex w-full overflow-x-auto justify-start hide-scrollbar gap-2 p-1 bg-primary-slate/30 rounded-xl m-0">
+            <TabsTrigger value="hero">Hero</TabsTrigger>
+            <TabsTrigger value="services">Services</TabsTrigger>
+            <TabsTrigger value="reasons">Reasons</TabsTrigger>
+            <TabsTrigger value="works">Works</TabsTrigger>
+            <TabsTrigger value="testimonials">Testimonials</TabsTrigger>
+            <TabsTrigger value="faqs">FAQs</TabsTrigger>
+            <TabsTrigger value="clients">Clients</TabsTrigger>
+            <TabsTrigger value="headings">Section Headings</TabsTrigger>
+            <TabsTrigger value="final-cta">Final CTA</TabsTrigger>
+          </TabsList>
+        </div>
 
         {/* Hero */}
         <TabsContent value="hero" className="space-y-6">

@@ -430,26 +430,27 @@ export function AboutPageCMS() {
     setAchievements(updated);
   };
   const deleteAchievement = index => setAchievements(achievements.filter((_, i) => i !== index));
-  return <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-white">About Page CMS</h2>
-        <Button onClick={handleSave} className="group" disabled={loading || saveStatus === 'saving'}>
-          <Save className="w-4 h-4 mr-2" />
-          {saveStatus === 'saving' ? 'Saving...' : saveStatus === 'success' ? 'Saved!' : saveStatus === 'error' ? 'Error' : 'Save Changes'}
-        </Button>
-      </div>
-
-      <Tabs defaultValue="hero" className="w-full">
-        <TabsList className="flex w-full overflow-x-auto justify-start hide-scrollbar gap-2 p-1 bg-primary-slate/30 rounded-xl mb-6">
-          <TabsTrigger value="hero">Hero</TabsTrigger>
-          <TabsTrigger value="stats">Stats</TabsTrigger>
-          <TabsTrigger value="values">Values</TabsTrigger>
-          <TabsTrigger value="timeline">Timeline</TabsTrigger>
-          <TabsTrigger value="team">Team</TabsTrigger>
-          <TabsTrigger value="awards">Awards</TabsTrigger>
-          <TabsTrigger value="achievements">Achievements</TabsTrigger>
-          <TabsTrigger value="why-choose">Why Choose Us</TabsTrigger>
-        </TabsList>
+  return <div className="space-y-6 relative">
+      <Tabs defaultValue="hero" className="w-full relative">
+        <div className="sticky top-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-md -mx-6 px-6 pt-6 pb-4 border-b border-white/10 shadow-2xl -mt-6 mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold text-white">About Page CMS</h2>
+            <Button onClick={handleSave} className="group" disabled={loading || saveStatus === 'saving'}>
+              <Save className="w-4 h-4 mr-2" />
+              {saveStatus === 'saving' ? 'Saving...' : saveStatus === 'success' ? 'Saved!' : saveStatus === 'error' ? 'Error' : 'Save Changes'}
+            </Button>
+          </div>
+          <TabsList className="flex w-full overflow-x-auto justify-start hide-scrollbar gap-2 p-1 bg-primary-slate/30 rounded-xl m-0">
+            <TabsTrigger value="hero">Hero</TabsTrigger>
+            <TabsTrigger value="stats">Stats</TabsTrigger>
+            <TabsTrigger value="values">Values</TabsTrigger>
+            <TabsTrigger value="timeline">Timeline</TabsTrigger>
+            <TabsTrigger value="team">Team</TabsTrigger>
+            <TabsTrigger value="awards">Awards</TabsTrigger>
+            <TabsTrigger value="achievements">Achievements</TabsTrigger>
+            <TabsTrigger value="why-choose">Why Choose Us</TabsTrigger>
+          </TabsList>
+        </div>
 
         {/* Hero Section */}
         <TabsContent value="hero" className="space-y-6">

@@ -2,7 +2,6 @@ from rest_framework import serializers
 from .models import PortfolioItem, PortfolioCategory, Technology, TeamRole, PortfolioMethod, TeamMember
 
 class PortfolioItemSerializer(serializers.ModelSerializer):
-    category = serializers.CharField(source='category.name', allow_blank=True, required=False)
     technologies = serializers.ListField(
         child=serializers.CharField(), required=False, write_only=True
     )
@@ -25,7 +24,6 @@ class PortfolioItemSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
-        ret['category'] = instance.category.name if instance.category else ''
         ret['technologies'] = [t.name for t in instance.technologies.all()]
         ret['methods'] = [m.name for m in instance.methods.all()]
         
@@ -41,17 +39,6 @@ class PortfolioItemSerializer(serializers.ModelSerializer):
         return ret
 
     def _handle_nested(self, instance, validated_data):
-        # Category
-        category_name = validated_data.pop('category', None)
-        if category_name is not None:
-            if isinstance(category_name, dict):
-                category_name = category_name.get('name', '')
-            if category_name:
-                cat, _ = PortfolioCategory.objects.get_or_create(name=category_name)
-                instance.category = cat
-            else:
-                instance.category = None
-            instance.save()
 
         # Technologies
         techs = validated_data.pop('technologies', None)
@@ -81,7 +68,6 @@ class PortfolioItemSerializer(serializers.ModelSerializer):
                     TeamMember.objects.create(portfolio_item=instance, role=role_obj, name=person)
 
     def create(self, validated_data):
-        category_data = validated_data.pop('category', None)
         tech_data = validated_data.pop('technologies', None)
         methods_data = validated_data.pop('methods', None)
         team_data = validated_data.pop('team', None)
@@ -89,7 +75,6 @@ class PortfolioItemSerializer(serializers.ModelSerializer):
         instance = super().create(validated_data)
         
         self._handle_nested(instance, {
-            'category': category_data,
             'technologies': tech_data,
             'methods': methods_data,
             'team': team_data
@@ -97,7 +82,6 @@ class PortfolioItemSerializer(serializers.ModelSerializer):
         return instance
 
     def update(self, instance, validated_data):
-        category_data = validated_data.pop('category', None)
         tech_data = validated_data.pop('technologies', None)
         methods_data = validated_data.pop('methods', None)
         team_data = validated_data.pop('team', None)
@@ -105,7 +89,6 @@ class PortfolioItemSerializer(serializers.ModelSerializer):
         instance = super().update(instance, validated_data)
         
         self._handle_nested(instance, {
-            'category': category_data,
             'technologies': tech_data,
             'methods': methods_data,
             'team': team_data

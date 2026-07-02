@@ -73,7 +73,7 @@ export function FooterPageCMS() {
           <CardTitle>Footer Details</CardTitle>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="space-y-2">
+          {/* <div className="space-y-2">
             <label className="text-sm font-medium">Company Name</label>
             <input 
               type="text" 
@@ -81,7 +81,7 @@ export function FooterPageCMS() {
               value={footerData.company_name || ''} 
               onChange={e => setFooterData({...footerData, company_name: e.target.value})} 
             />
-          </div>
+          </div> */}
           <div className="space-y-2">
             <label className="text-sm font-medium">Email</label>
             <input 
@@ -141,7 +141,7 @@ export function FooterPageCMS() {
                 placeholder="Enter terms and conditions text here..."
               />
             </div>
-            <div className="space-y-2">
+            {/* <div className="space-y-2">
               <label className="text-sm font-medium">Cookie Policy Content</label>
               <textarea 
                 className="flex min-h-[150px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
@@ -149,7 +149,7 @@ export function FooterPageCMS() {
                 onChange={e => setFooterData({...footerData, cookie_policy_text: e.target.value})} 
                 placeholder="Enter cookie policy text here..."
               />
-            </div>
+            </div> */}
           </div>
 
           <div className="pt-4 pb-2 border-b flex justify-between items-center">

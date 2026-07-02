@@ -14,7 +14,7 @@ export default function AdminLayout({
     console.log('Saving changes...');
   };
   return <SidebarProvider>
-      <div className="min-h-screen flex w-full">
+      <div className="h-screen flex w-full overflow-hidden">
         {/* Fixed Sidebar */}
         <div className="fixed left-0 top-0 h-screen z-40">
           <AdminSidebar activeTab={activeTab} onTabChange={setActiveTab} />

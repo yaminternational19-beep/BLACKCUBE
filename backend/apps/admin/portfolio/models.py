@@ -24,7 +24,7 @@ class TeamRole(models.Model):
 class PortfolioItem(models.Model):
     title = models.CharField(max_length=255)
     description = models.TextField(blank=True, default='')
-    category = models.ForeignKey(PortfolioCategory, on_delete=models.SET_NULL, null=True, blank=True, related_name='portfolio_items')
+    category = models.CharField(max_length=255, blank=True, default='')
     
     technologies = models.ManyToManyField(Technology, blank=True, related_name='portfolio_items')
     

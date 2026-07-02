@@ -106,7 +106,7 @@ const PortfolioClient = ({ initialData, initialPortfolioItems }) => {
   }, [initialData, initialPortfolioItems]);
 
   const filteredItems = portfolioItems.filter((item) => {
-    const matchesCategory = selectedCategory === 'All' || item.category === selectedCategory;
+    const matchesCategory = selectedCategory === 'All' || (item.category && item.category.split(',').map(c => c.trim().toLowerCase()).includes(selectedCategory.toLowerCase()));
     const matchesSearch = item.title?.toLowerCase().includes(searchTerm.toLowerCase()) || (item.technologies || []).some((t) => t.toLowerCase().includes(searchTerm.toLowerCase()));
     return matchesCategory && matchesSearch;
   });

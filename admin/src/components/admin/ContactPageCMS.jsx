@@ -299,26 +299,27 @@ export function ContactPageCMS() {
     setOfficeLocations(updated);
   };
   const deleteOfficeLocation = index => setOfficeLocations(officeLocations.filter((_, i) => i !== index));
-  return <div className="space-y-6">
-      <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-bold text-white">Contact Page CMS</h2>
-        <Button onClick={handleSave} className="group" disabled={loading || saveStatus === 'saving'}>
-          <Save className="w-4 h-4 mr-2" />
-          {saveStatus === 'saving' ? 'Saving...' : saveStatus === 'success' ? 'Saved!' : saveStatus === 'error' ? 'Error' : 'Save Changes'}
-        </Button>
-      </div>
-
-      <Tabs defaultValue="hero" className="w-full">
-        <TabsList className="flex w-full overflow-x-auto justify-start hide-scrollbar gap-2 p-1 bg-primary-slate/30 rounded-xl mb-6">
-          <TabsTrigger value="hero">Hero</TabsTrigger>
-          <TabsTrigger value="channels-intro">Channels Intro</TabsTrigger>
-          <TabsTrigger value="email">Email</TabsTrigger>
-          <TabsTrigger value="phone">Phone</TabsTrigger>
-          <TabsTrigger value="form">Form</TabsTrigger>
-          <TabsTrigger value="form-options">Form Options</TabsTrigger>
-          <TabsTrigger value="offices">Office Locations</TabsTrigger>
-          <TabsTrigger value="preview">Preview</TabsTrigger>
-        </TabsList>
+  return <div className="space-y-6 relative">
+      <Tabs defaultValue="hero" className="w-full relative">
+        <div className="sticky top-0 z-50 bg-[#0a0a0a]/95 backdrop-blur-md -mx-6 px-6 pt-6 pb-4 border-b border-white/10 shadow-2xl -mt-6 mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h2 className="text-2xl font-bold text-white">Contact Page CMS</h2>
+            <Button onClick={handleSave} className="group" disabled={loading || saveStatus === 'saving'}>
+              <Save className="w-4 h-4 mr-2" />
+              {saveStatus === 'saving' ? 'Saving...' : saveStatus === 'success' ? 'Saved!' : saveStatus === 'error' ? 'Error' : 'Save Changes'}
+            </Button>
+          </div>
+          <TabsList className="flex w-full overflow-x-auto justify-start hide-scrollbar gap-2 p-1 bg-primary-slate/30 rounded-xl m-0">
+            <TabsTrigger value="hero">Hero</TabsTrigger>
+            <TabsTrigger value="channels-intro">Channels Intro</TabsTrigger>
+            <TabsTrigger value="email">Email</TabsTrigger>
+            <TabsTrigger value="phone">Phone</TabsTrigger>
+            <TabsTrigger value="form">Form</TabsTrigger>
+            <TabsTrigger value="form-options">Form Options</TabsTrigger>
+            <TabsTrigger value="offices">Office Locations</TabsTrigger>
+            <TabsTrigger value="preview">Preview</TabsTrigger>
+          </TabsList>
+        </div>
 
         {/* Hero Section */}
         <TabsContent value="hero" className="space-y-6">
