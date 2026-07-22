@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import PortfolioItem, PortfolioCategory, Technology, TeamRole, PortfolioMethod, TeamMember
+from .models import PortfolioItem, PortfolioCategory, Technology, TeamRole, PortfolioMethod, TeamMember, ClientLogo
 
 class PortfolioItemSerializer(serializers.ModelSerializer):
     technologies = serializers.ListField(
@@ -94,3 +94,10 @@ class PortfolioItemSerializer(serializers.ModelSerializer):
             'team': team_data
         })
         return instance
+
+
+class ClientLogoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ClientLogo
+        fields = '__all__'
+

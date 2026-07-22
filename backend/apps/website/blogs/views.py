@@ -1,9 +1,11 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
 from core.response.api_response import success_response, error_response
 from core.services.statuscodes import StatusCodes
 from .services import WebsiteBlogService
 
 @api_view(['GET'])
+@permission_classes([AllowAny])
 def website_blogs(request):
     try:
         data = WebsiteBlogService.get_all()

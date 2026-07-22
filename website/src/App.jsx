@@ -1,6 +1,10 @@
+import { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import ScrollToTop from './components/ScrollToTop';
+import CookieConsentModal from './components/CookieConsentModal';
+import ProjectEstimatorModal from './components/ProjectEstimatorModal';
+import WhatsAppWidget from './components/WhatsAppWidget';
 
 // Modules
 import Home from './modules/home';
@@ -12,9 +16,15 @@ import Contact from './modules/contact';
 import LegalPage from './modules/legal/LegalPage';
 
 function App() {
+  // const [estimatorOpen, setEstimatorOpen] = useState(false);
+
   return (
     <Router>
       <ScrollToTop />
+      <CookieConsentModal />
+      {/* ProjectEstimatorModal commented out as requested */}
+      {/* <ProjectEstimatorModal isOpen={estimatorOpen} onClose={() => setEstimatorOpen(false)} /> */}
+      <WhatsAppWidget />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />

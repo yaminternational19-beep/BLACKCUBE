@@ -21,7 +21,8 @@ export function FooterPageCMS() {
       linkedin: '',
       twitter: '',
       instagram: '',
-      facebook: ''
+      facebook: '',
+      whatsapp: ''
     },
     custom_links: []
   });
@@ -35,7 +36,7 @@ export function FooterPageCMS() {
           const data = res.data;
           setFooterData({
             ...data,
-            social_links: data.social_links || { linkedin: '', twitter: '', instagram: '', facebook: '' },
+            social_links: data.social_links || { linkedin: '', twitter: '', instagram: '', facebook: '', whatsapp: '' },
             custom_links: data.custom_links || []
           });
         }
@@ -237,6 +238,21 @@ export function FooterPageCMS() {
                 value={footerData.social_links?.facebook || ''} 
                 onChange={e => setFooterData({...footerData, social_links: {...footerData.social_links, facebook: e.target.value}})} 
               />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">WhatsApp Company Number </label>
+              <input 
+                type="text" 
+                maxLength={10}
+                placeholder="Enter number (e.g. 9876543210)"
+                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+                value={footerData.social_links?.whatsapp || ''} 
+                onChange={e => {
+                  const val = e.target.value.replace(/\D/g, '').slice(0, 10);
+                  setFooterData({...footerData, social_links: {...footerData.social_links, whatsapp: val}});
+                }} 
+              />
+              <p className="text-xs text-muted-foreground">Store 10-digit number only (no country code or spaces).</p>
             </div>
           </div>
           

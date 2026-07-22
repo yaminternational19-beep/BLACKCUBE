@@ -1,12 +1,12 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import IsAuthenticated
 
 from apps.admin.contact.models import ContactSubmission
 from apps.admin.jobs.models import JobApplication
 
 class UnreadCountsAPIView(APIView):
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
 
     def get(self, request, *args, **kwargs):
         contact_count = ContactSubmission.objects.filter(is_read=False).count()

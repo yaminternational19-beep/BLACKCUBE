@@ -227,6 +227,32 @@ export const notificationsApi = {
   }
 };
 
+// Client Logos API
+export const clientLogoApi = {
+  list: async () => {
+    return apiRequest('/portfolio/client-logos', 'GET');
+  },
+  create: async logoData => {
+    return apiRequest('/portfolio/client-logos', 'POST', logoData);
+  },
+  update: async (id, logoData) => {
+    return apiRequest(`/portfolio/client-logos/${id}`, 'PUT', logoData);
+  },
+  delete: async id => {
+    return apiRequest(`/portfolio/client-logos/${id}`, 'DELETE');
+  }
+};
+
+// Project Estimates API
+export const projectEstimateApi = {
+  list: async () => {
+    return apiRequest('/admin/contact-submissions/estimates/', 'GET');
+  },
+  delete: async id => {
+    return apiRequest(`/admin/contact-submissions/estimates/${id}/`, 'DELETE');
+  }
+};
+
 // Upload API functions
 export const uploadApi = {
   uploadImage: async (file, folder = 'images') => {

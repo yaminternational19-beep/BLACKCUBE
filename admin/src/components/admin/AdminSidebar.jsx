@@ -53,6 +53,16 @@ const sidebarItems = [{
   title: "Job Applications",
   icon: FileText,
   description: "Manage Job Applications"
+}, /* {
+  id: "project-estimates",
+  title: "Project Estimates",
+  icon: FileText,
+  description: "View Project Cost Estimate Leads"
+}, */ {
+  id: "client-logos",
+  title: "Client Logos",
+  icon: Settings,
+  description: "Manage Partner & Client Logos"
 }, {
   id: "footer-cms",
   title: "Footer Settings",

@@ -21,6 +21,15 @@ class CustomJWTAuthentication(BaseAuthentication):
                 raise AuthenticationFailed('Token payload invalid')
                 
             admin_user = AdminUser.objects.get(id=user_id, is_active=True)
+            
+            # Update session activity timestamp in AdminLoginLog
+            try:
+                from django.utils import timezone
+                from apps.authentication.models import AdminLoginLog
+                AdminLoginLog.objects.filter(token=token, user=admin_user, is_active=True).update(last_activity=timezone.now())
+            except Exception:
+                pass
+                
             return (admin_user, token)
         except ValueError as e:
             raise AuthenticationFailed(str(e))

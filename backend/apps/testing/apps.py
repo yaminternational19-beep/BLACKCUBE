@@ -6,9 +6,9 @@ class TestingConfig(AppConfig):
     label = 'testing'
 
     def ready(self):
-        import sys
-        # Only run on runserver to prevent execution on migrate/collectstatic
-        if 'runserver' in sys.argv:
+        import sys, os
+        # Only run on main runserver process to execute check exactly once
+        if 'runserver' in sys.argv and os.environ.get('RUN_MAIN') == 'true':
             from django.conf import settings
             try:
                 from testing.db.services import check_database_health
@@ -17,10 +17,10 @@ class TestingConfig(AppConfig):
                 print("--- Startup Database Check ---")
                 
                 db_config = settings.DATABASES.get('default', {})
-                print(f"Host: {db_config.get('HOST')}")
-                print(f"Port: {db_config.get('PORT')}")
-                print(f"User: {db_config.get('USER')}")
-                print(f"Database: {db_config.get('NAME')}")
+                # print(f"Host: {db_config.get('HOST')}")
+                # print(f"Port: {db_config.get('PORT')}")
+                # print(f"User: {db_config.get('USER')}")
+                # print(f"Database: {db_config.get('NAME')}")
                 
                 res = check_database_health()
                 

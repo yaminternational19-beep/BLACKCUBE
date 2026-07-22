@@ -65,3 +65,19 @@ class TeamMember(models.Model):
 
     def __str__(self):
         return f"{self.name or self.user} - {self.role}"
+
+
+class ClientLogo(models.Model):
+    name = models.CharField(max_length=255)
+    logo_url = models.CharField(max_length=500)
+    website_url = models.CharField(max_length=500, blank=True, default='')
+    index_value = models.IntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['index_value', '-created_at']
+
+    def __str__(self):
+        return self.name
+

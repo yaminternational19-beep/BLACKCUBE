@@ -39,9 +39,9 @@ const CustomCursor = () => {
       style={{
         left: position.x - 10,
         top: position.y - 10
-      }} />);
-
-
+      }}
+    />
+  );
 };
 
 export default CustomCursor;

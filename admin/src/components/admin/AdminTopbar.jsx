@@ -16,7 +16,7 @@ export function AdminTopbar({}) {
     }
   }, []);
 
-  return <header className="h-16 bg-background border-b border-border flex items-center justify-between px-6 w-full">
+  return <header className="h-16 bg-background flex items-center justify-between px-6 w-full">
       <div className="flex items-center gap-4">
         <SidebarTrigger className="h-8 w-8" />
         <div className="flex items-center gap-3">

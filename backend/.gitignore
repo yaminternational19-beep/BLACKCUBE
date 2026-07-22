@@ -11,6 +11,7 @@ db.sqlite3-journal
 
 # Media and Static files
 media/
+uploads/
 staticfiles/
 
 # Environments

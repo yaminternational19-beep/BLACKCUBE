@@ -19,6 +19,9 @@ export default function Login() {
         if (res.data.data.user?.email) {
           localStorage.setItem('admin_email', res.data.data.user.email);
         }
+        if (res.data.data.session?.id) {
+          localStorage.setItem('admin_session_id', res.data.data.session.id);
+        }
         navigate('/');
       } else {
         alert('Invalid credentials');

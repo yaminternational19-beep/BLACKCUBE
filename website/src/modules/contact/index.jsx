@@ -92,17 +92,47 @@ const ContactPage = () => {
     submitButton: 'Send your Inquiry',
     submittingButton: 'Sending...'
   });
-  const [serviceOptions, setServiceOptions] = useState(['Web Development', 'Mobile App Development', 'UI/UX Design', 'Digital Marketing']);
-  const [subjectOptions, setSubjectOptions] = useState([{
-    value: 'general',
-    label: 'General Inquiry'
-  }, {
-    value: 'project',
-    label: 'New Project'
-  }, {
-    value: 'support',
-    label: 'Support'
-  }]);
+  const serviceSubjectMapping = {
+    'Web Development': [
+      { value: 'New Website Development', label: 'New Website Development' },
+      { value: 'E-Commerce Store', label: 'E-Commerce Store Development' },
+      { value: 'Website Redesign', label: 'Website Redesign & Modernization' },
+      { value: 'Custom Web Portal', label: 'Custom Web Application / Portal' },
+      { value: 'Website Maintenance', label: 'Website Maintenance & Support' }
+    ],
+    'Mobile App Development': [
+      { value: 'Native iOS & Android App', label: 'Native iOS & Android App' },
+      { value: 'Cross-Platform App', label: 'Cross-Platform App (React Native/Flutter)' },
+      { value: 'Mobile App Redesign', label: 'Mobile App Redesign & UI Upgrade' },
+      { value: 'App Maintenance & API', label: 'App Maintenance & Backend API' }
+    ],
+    'UI/UX Design': [
+      { value: 'Complete Product UI/UX', label: 'Complete UI/UX Product Design' },
+      { value: 'Design System & Branding', label: 'Design System & Brand Identity' },
+      { value: 'Wireframing & Prototypes', label: 'Wireframing & Interactive Prototypes' }
+    ],
+    'Digital Marketing': [
+      { value: 'SEO Optimization', label: 'Search Engine Optimization (SEO)' },
+      { value: 'Social Media Growth', label: 'Social Media Growth & Campaigns' },
+      { value: 'PPC & Paid Ads', label: 'Performance Marketing & PPC' }
+    ],
+    'Cloud Solutions': [
+      { value: 'Cloud Migration', label: 'Cloud Architecture & Migration' },
+      { value: 'DevOps & CI/CD', label: 'DevOps & CI/CD Pipelines' },
+      { value: 'Cloud Infrastructure', label: 'Cloud Infrastructure & Security' }
+    ]
+  };
+
+  const defaultSubjects = [
+    { value: 'Project Estimate / Quote', label: 'Project Estimate / Quote Request' },
+    { value: 'New Project Consultation', label: 'New Project Consultation' },
+    { value: 'General Inquiry', label: 'General Inquiry' },
+    { value: 'Partnership / Collaboration', label: 'Partnership / Business Collaboration' },
+    { value: 'Technical Support', label: 'Technical Support' }
+  ];
+
+  const [serviceOptions, setServiceOptions] = useState(['Web Development', 'Mobile App Development', 'UI/UX Design', 'Digital Marketing', 'Cloud Solutions']);
+  const [subjectOptions, setSubjectOptions] = useState(defaultSubjects);
   const [responseCard, setResponseCard] = useState({ title: '24 Hour Response', description: 'We aim to respond to all inquiries within 24 hours during business days.' });
   const [privacyCard, setPrivacyCard] = useState({ title: 'Privacy Guaranteed', description: 'Your information is secure and will never be shared with third parties.' });
   const [officeLocationsSection, setOfficeLocationsSection] = useState({ title: 'Our Offices', subtitle: 'Visit us at one of our global locations' });
@@ -171,7 +201,20 @@ const ContactPage = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setContactForm((prev) => ({ ...prev, [name]: value }));
+    setContactForm((prev) => {
+      const updated = { ...prev, [name]: value };
+      if (name === 'service') {
+        if (serviceSubjectMapping[value]) {
+          setSubjectOptions([
+            ...serviceSubjectMapping[value],
+            ...defaultSubjects
+          ]);
+        } else {
+          setSubjectOptions(defaultSubjects);
+        }
+      }
+      return updated;
+    });
   };
 
   const handleSubmit = async (e) => {
@@ -325,20 +368,26 @@ const ContactPage = () => {
               </div>
 
               <form onSubmit={handleSubmit} className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                {/* Row 1: Full Name & Email Address */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-gray-400 text-sm mb-2">{contactFormSection.formLabels?.name}</label>
+                    <label className="block text-gray-300 text-sm mb-2 font-medium">
+                      {contactFormSection.formLabels?.name}
+                      <span className="text-red-500 ml-1">*</span>
+                    </label>
                     <input
                       name="name"
                       value={contactForm.name}
                       onChange={handleInputChange}
                       placeholder={contactFormSection.placeholders?.name}
                       required
-                      className="w-full px-4 py-3 bg-[#0f0f0f] rounded-xl text-white ring-1 ring-white/10 focus:outline-none focus:ring-white/20" />
-                    
+                      className="w-full px-4 py-3 bg-[#0f0f0f] rounded-xl text-white ring-1 ring-white/10 focus:outline-none focus:ring-2 focus:ring-primary-blue/50 transition-all" />
                   </div>
                   <div>
-                    <label className="block text-gray-400 text-sm mb-2">{contactFormSection.formLabels?.email}</label>
+                    <label className="block text-gray-300 text-sm mb-2 font-medium">
+                      {contactFormSection.formLabels?.email}
+                      <span className="text-red-500 ml-1">*</span>
+                    </label>
                     <input
                       name="email"
                       type="email"
@@ -346,66 +395,83 @@ const ContactPage = () => {
                       onChange={handleInputChange}
                       placeholder={contactFormSection.placeholders?.email}
                       required
-                      className="w-full px-4 py-3 bg-[#0f0f0f] rounded-xl text-white ring-1 ring-white/10 focus:outline-none focus:ring-white/20" />
-                    
+                      className="w-full px-4 py-3 bg-[#0f0f0f] rounded-xl text-white ring-1 ring-white/10 focus:outline-none focus:ring-2 focus:ring-primary-blue/50 transition-all" />
                   </div>
+                </div>
+
+                {/* Row 2: Phone Number & Company Name */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div>
-                    <label className="block text-gray-400 text-sm mb-2">{contactFormSection.formLabels?.phone}</label>
+                    <label className="block text-gray-300 text-sm mb-2 font-medium">
+                      {contactFormSection.formLabels?.phone}
+                      <span className="text-red-500 ml-1">*</span>
+                    </label>
                     <input
                       name="phone"
                       value={contactForm.phone}
                       onChange={handleInputChange}
                       placeholder={contactFormSection.placeholders?.phone}
                       required
-                      className="w-full px-4 py-3 bg-[#0f0f0f] rounded-xl text-white ring-1 ring-white/10 focus:outline-none focus:ring-white/20" />
-                    
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-                  <div>
-                    <label className="block text-gray-400 text-sm mb-2">{contactFormSection.formLabels?.service}</label>
-                    <select
-                      name="service"
-                      value={contactForm.service}
-                      onChange={handleInputChange}
-                      className="w-full px-4 py-3 bg-[#0f0f0f] rounded-xl text-white ring-1 ring-white/10 focus:outline-none focus:ring-white/20">
-                      
-                      <option value="">{contactFormSection.placeholders?.service}</option>
-                      {serviceOptions.map((opt) =>
-                      <option key={opt} value={opt}>{opt}</option>
-                      )}
-                    </select>
+                      className="w-full px-4 py-3 bg-[#0f0f0f] rounded-xl text-white ring-1 ring-white/10 focus:outline-none focus:ring-2 focus:ring-primary-blue/50 transition-all" />
                   </div>
                   <div>
-                    <label className="block text-gray-400 text-sm mb-2">{contactFormSection.formLabels?.company}</label>
+                    <label className="block text-gray-300 text-sm mb-2 font-medium">
+                      {contactFormSection.formLabels?.company || 'Company / Organization (Optional)'}
+                      <span className="text-red-500 ml-1">*</span>
+                    </label>
                     <input
                       name="company"
                       value={contactForm.company}
                       onChange={handleInputChange}
-                      placeholder={contactFormSection.placeholders?.company}
-                      className="w-full px-4 py-3 bg-[#0f0f0f] rounded-xl text-white ring-1 ring-white/10 focus:outline-none focus:ring-white/20" />
-                    
+                      placeholder={contactFormSection.placeholders?.company || 'Enter Company Name'}
+                      required
+                      className="w-full px-4 py-3 bg-[#0f0f0f] rounded-xl text-white ring-1 ring-white/10 focus:outline-none focus:ring-2 focus:ring-primary-blue/50 transition-all" />
+                  </div>
+                </div>
+
+                {/* Row 3: Select Service & Select Subject (Dynamic Flow) */}
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label className="block text-gray-300 text-sm mb-2 font-medium">
+                      {contactFormSection.formLabels?.service || 'Select Interested Service'}
+                      <span className="text-red-500 ml-1">*</span>
+                    </label>
+                    <select
+                      name="service"
+                      value={contactForm.service}
+                      onChange={handleInputChange}
+                      required
+                      className="w-full px-4 py-3 bg-[#0f0f0f] rounded-xl text-white ring-1 ring-white/10 focus:outline-none focus:ring-2 focus:ring-primary-blue/50 transition-all cursor-pointer">
+                      <option value="" className="bg-slate-900 text-gray-400">{contactFormSection.placeholders?.service || 'Choose a Service'}</option>
+                      {serviceOptions.map((opt) => (
+                        <option key={opt} value={opt} className="bg-slate-900 text-white">{opt}</option>
+                      ))}
+                    </select>
                   </div>
                   <div>
-                    <label className="block text-gray-400 text-sm mb-2">{contactFormSection.formLabels?.subject}</label>
+                    <label className="block text-gray-300 text-sm mb-2 font-medium">
+                      {contactFormSection.formLabels?.subject || 'Select Subject / Inquiry Type'}
+                      <span className="text-red-500 ml-1">*</span>
+                    </label>
                     <select
                       name="subject"
                       value={contactForm.subject}
                       onChange={handleInputChange}
                       required
-                      className="w-full px-4 py-3 bg-[#0f0f0f] rounded-xl text-white ring-1 ring-white/10 focus:outline-none focus:ring-white/20">
-                      
-                      <option value="">{contactFormSection.placeholders?.subject}</option>
-                      {subjectOptions.map((opt) =>
-                      <option key={opt.value} value={opt.value}>{opt.label}</option>
-                      )}
+                      className="w-full px-4 py-3 bg-[#0f0f0f] rounded-xl text-white ring-1 ring-white/10 focus:outline-none focus:ring-2 focus:ring-primary-blue/50 transition-all cursor-pointer">
+                      <option value="" className="bg-slate-900 text-gray-400">{contactFormSection.placeholders?.subject || 'Select Subject'}</option>
+                      {subjectOptions.map((opt) => (
+                        <option key={opt.value || opt.label} value={opt.value || opt.label} className="bg-slate-900 text-white">{opt.label || opt.value}</option>
+                      ))}
                     </select>
                   </div>
                 </div>
 
                 <div>
-                  <label className="block text-gray-400 text-sm mb-2">{contactFormSection.formLabels?.message}</label>
+                  <label className="block text-gray-300 text-sm mb-2 font-medium">
+                    {contactFormSection.formLabels?.message}
+                    <span className="text-red-500 ml-1">*</span>
+                  </label>
                   <textarea
                     name="message"
                     value={contactForm.message}

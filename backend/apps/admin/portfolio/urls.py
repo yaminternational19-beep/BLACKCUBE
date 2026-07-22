@@ -1,8 +1,9 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
-from .views import PortfolioItemViewSet
+from .views import PortfolioItemViewSet, ClientLogoViewSet
 
 router = DefaultRouter(trailing_slash=False)
+router.register(r'client-logos', ClientLogoViewSet, basename='client-logos')
 router.register(r'', PortfolioItemViewSet, basename='portfolio')
 
 urlpatterns = [

@@ -1,20 +1,59 @@
-# General
-.DS_Store
-.idea/
-.vscode/
-*.log
+# Environment & Secret files
 .env
+.env.*
+.env.production
+.env.staging
 .env.local
-.env.*.local
+.env.development
+*.env
 
-# Node
+# Node.js
 node_modules/
+**/node_modules/
+dist/
+**/dist/
+dist-ssr/
+**/dist-ssr/
+build/
+**/build/
+.next/
+**/out/
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
 
-# Python
+# Python & Virtual Environments
 __pycache__/
+**/__pycache__/
 *.py[cod]
 *$py.class
 venv/
-env/
+**/venv/
 .venv/
-requirements.txt
+**/.venv/
+env/
+**/env/
+ENV/
+*.venv
+
+# Django & Local Database
+db.sqlite3
+db.sqlite3-journal
+**/db.sqlite3
+local_settings.py
+
+# Media, Uploads & Storage
+media/
+**/media/
+uploads/
+**/uploads/
+staticfiles/
+
+# System & IDE files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.suo
+*.user

@@ -15,6 +15,8 @@ import { ContactPageCMS } from "./ContactPageCMS";
 import { PortfolioPageCMS } from "./PortfolioPageCMS";
 import { CareerPageCMS } from "./CareerPageCMS";
 import { FooterPageCMS } from "./FooterPageCMS";
+import ClientLogosCMS from "./ClientLogosCMS";
+import ProjectEstimatesCMS from "./ProjectEstimatesCMS";
 export function AdminContent({
   activeTab,
   onTabChange
@@ -632,6 +634,10 @@ export function AdminContent({
       return <ContactManagement />;
     case 'job-applications':
       return <JobApplications />;
+    // case 'project-estimates':
+    //   return <ProjectEstimatesCMS />;
+    case 'client-logos':
+      return <ClientLogosCMS />;
     case 'home-cms':
       return <HomePageCMS />;
     case 'about-cms':

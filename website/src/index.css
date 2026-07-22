@@ -181,3 +181,49 @@ a, button, [role="button"] {
 a:hover, h1:hover, h2:hover, h3:hover, p:hover {
   text-shadow: 0 0 8px rgba(0, 120, 255, 0.25);
 }
+
+/* ==========================================================================
+   Client Logos Marquee (Infinite Left-To-Right Scroll & Responsive Styles)
+   ========================================================================== */
+
+section.client-logos-section {
+  padding: 1.75rem 0 !important;
+  background: transparent !important;
+}
+
+@media (min-width: 640px) {
+  section.client-logos-section {
+    padding: 2.25rem 0 !important;
+  }
+}
+
+@media (min-width: 1024px) {
+  section.client-logos-section {
+    padding: 2.75rem 0 !important;
+  }
+}
+
+@keyframes marquee-rtl {
+  0% {
+    transform: translateX(0%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee-rtl {
+  animation: marquee-rtl 28s linear infinite;
+  will-change: transform;
+}
+
+@media (max-width: 768px) {
+  .animate-marquee-rtl {
+    animation-duration: 20s;
+  }
+}
+
+.marquee-container:hover .animate-marquee-rtl {
+  animation-play-state: paused;
+}
+

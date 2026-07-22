@@ -1,9 +1,11 @@
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view, permission_classes
+from rest_framework.permissions import AllowAny
 from core.response.api_response import success_response, error_response
 from core.services.statuscodes import StatusCodes
 from .services import AdminAuthService
 
 @api_view(['POST'])
+@permission_classes([AllowAny])
 def admin_login(request):
     try:
         data = request.data
@@ -17,7 +19,7 @@ def admin_login(request):
                 status_code=StatusCodes.BAD_REQUEST
             )
 
-        auth_data, error_msg = AdminAuthService.authenticate_admin(email, password)
+        auth_data, error_msg = AdminAuthService.authenticate_admin(email, password, request)
         
         if error_msg:
             return error_response(

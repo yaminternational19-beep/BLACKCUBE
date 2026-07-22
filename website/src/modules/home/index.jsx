@@ -18,6 +18,7 @@ import {
 "lucide-react";
 import SEO from '@/components/SEO';
 import Layout from "@/components/layout/Layout";
+import ClientLogosMarquee from "@/components/sections/ClientLogosMarquee";
 import { pageApi, getAssetUrl } from "@/api";
 import { Link } from 'react-router-dom';
 import { defaultHomePageData } from "@/data/home";
@@ -378,6 +379,42 @@ const HomeClient = ({ initialData }) => {
           </div>
         </section>
 
+        {/* Client Logos Marquee */}
+        <ClientLogosMarquee />
+
+        {/* Clients Section */}
+        {clients && clients.length > 0 && (
+          <section id="clients" className="py-20 bg-[#0a0a0a] text-white relative overflow-hidden">
+            <div className="relative z-10 max-w-[1440px] mx-auto px-6 lg:px-12">
+              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
+                <h2 className="text-3xl md:text-5xl font-bold mb-3">
+                  {headings.clientsTitlePrefix}{" "}
+                  <span className="text-gray-400">{headings.clientsTitleHighlight}</span>
+                </h2>
+                <p className="text-gray-400 max-w-2xl mx-auto text-base">{headings.clientsDescription}</p>
+              </motion.div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {clients.map((client, index) => (
+                  <motion.div key={index} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }}>
+                    <Card hover className="bg-[#111] p-8 border-0 ring-1 ring-white/5 h-full flex flex-col justify-center text-center group transition-all hover:ring-white/20">
+                      {client.logo && (
+                        <div className="mb-6 mx-auto h-16 flex items-center justify-center opacity-60 group-hover:opacity-100 transition-opacity">
+                          <img src={getAssetUrl(client.logo)} alt={client.name} className="max-h-full max-w-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300" />
+                        </div>
+                      )}
+                      <h4 className="text-xl font-bold text-white mb-3 group-hover:text-primary-blue transition-colors">{client.name}</h4>
+                      {client.description && (
+                        <p className="text-sm text-gray-400">{client.description}</p>
+                      )}
+                    </Card>
+                  </motion.div>
+                ))}
+              </div>
+            </div>
+          </section>
+        )}
+
         {/* Testimonials */}
         <section id="testimonials" className="py-20 bg-black text-white relative overflow-hidden">
           <div className="absolute inset-0 bg-gradient-to-br from-black via-gray-900 to-black pointer-events-none" />
@@ -416,39 +453,6 @@ const HomeClient = ({ initialData }) => {
             .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
           `}</style>
         </section>
-
-        {/* Clients Section */}
-        {clients && clients.length > 0 && (
-          <section id="clients" className="py-20 bg-[#0a0a0a] text-white relative overflow-hidden">
-            <div className="relative z-10 max-w-[1440px] mx-auto px-6 lg:px-12">
-              <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-center mb-14">
-                <h2 className="text-3xl md:text-5xl font-bold mb-3">
-                  {headings.clientsTitlePrefix}{" "}
-                  <span className="text-gray-400">{headings.clientsTitleHighlight}</span>
-                </h2>
-                <p className="text-gray-400 max-w-2xl mx-auto text-base">{headings.clientsDescription}</p>
-              </motion.div>
-
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {clients.map((client, index) => (
-                  <motion.div key={index} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: index * 0.1 }}>
-                    <Card hover className="bg-[#111] p-8 border-0 ring-1 ring-white/5 h-full flex flex-col justify-center text-center group transition-all hover:ring-white/20">
-                      {client.logo && (
-                        <div className="mb-6 mx-auto h-16 flex items-center justify-center opacity-60 group-hover:opacity-100 transition-opacity">
-                          <img src={getAssetUrl(client.logo)} alt={client.name} className="max-h-full max-w-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300" />
-                        </div>
-                      )}
-                      <h4 className="text-xl font-bold text-white mb-3 group-hover:text-primary-blue transition-colors">{client.name}</h4>
-                      {client.description && (
-                        <p className="text-sm text-gray-400">{client.description}</p>
-                      )}
-                    </Card>
-                  </motion.div>
-                ))}
-              </div>
-            </div>
-          </section>
-        )}
 
         {/* FAQs Section */}
         {faqs && faqs.length > 0 && (

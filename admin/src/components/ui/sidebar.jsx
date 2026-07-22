@@ -3,7 +3,7 @@
 import * as React from "react";
 import { Slot } from "@radix-ui/react-slot";
 import { cva } from "class-variance-authority";
-import { PanelLeft } from "lucide-react";
+import { PanelLeft, PanelLeftClose, PanelLeftOpen } from "lucide-react";
 import { cn } from "@/lib/utils";
 // import Button from "@/components/ui/Button"
 
@@ -139,13 +139,14 @@ const SidebarTrigger = React.forwardRef(({
   ...props
 }, ref) => {
   const {
+    open,
     toggleSidebar
   } = useSidebar();
-  return <button ref={ref} data-sidebar="trigger" className={cn("inline-flex items-center justify-center font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed btn-glow", "text-primary-gray hover:text-primary-blue hover:bg-primary-blue/10 focus:ring-primary-blue", "px-4 py-2 text-sm rounded-lg", "h-7 w-7 p-0", className)} onClick={event => {
+  return <button ref={ref} data-sidebar="trigger" title={open ? "Collapse Sidebar" : "Expand Sidebar"} aria-label="Toggle Sidebar" className={cn("inline-flex items-center justify-center rounded-lg p-2 text-slate-300 hover:text-white hover:bg-slate-800/80 transition-all duration-200 focus:outline-none cursor-pointer border-0", className)} onClick={event => {
     onClick?.(event);
     toggleSidebar();
   }} {...props}>
-      <PanelLeft className="h-4 w-4" />
+      {open ? <PanelLeftClose className="h-5 w-5 text-slate-300 hover:text-white transition-transform" /> : <PanelLeftOpen className="h-5 w-5 text-cyan-400 hover:text-cyan-300 transition-transform" />}
       <span className="sr-only">Toggle Sidebar</span>
     </button>;
 });
