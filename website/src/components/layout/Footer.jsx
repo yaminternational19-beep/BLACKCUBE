@@ -268,9 +268,9 @@ const Footer = () => {
             <a href="/terms" onClick={goTo('/terms')} className="hover:text-white transition-colors">
               Terms & Conditions
             </a>
-            {/* <a href="/cookies" onClick={goTo('/cookies')} className="hover:text-white transition-colors">
+            <a href="/cookies" onClick={goTo('/cookies')} className="hover:text-white transition-colors">
               Cookie Policy
-            </a> */}
+            </a>
             
             {/* Custom Links */}
             {footerData.custom_links && footerData.custom_links.map((link, idx) => (
