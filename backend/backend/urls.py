@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from apps.admin.notifications import UnreadCountsAPIView
 
 urlpatterns = [
@@ -36,6 +38,6 @@ urlpatterns = [
     path('api/website/blogs/', include('apps.website.blogs.urls')),
     path('api/contact-submissions/', include('apps.website.contact.urls')),
     path('api/website/footer/', include('apps.website.footer.urls')),
-
-    # Testing APIs removed for production
 ]
+
+urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

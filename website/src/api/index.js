@@ -14,7 +14,7 @@ export const BASE_URL = RAW_URL.replace(/\/api$/, '') || '';
 
 export const getAssetUrl = (path) => {
   if (!path) return '';
-  if (path.startsWith('http')) return path;
+  if (path.startsWith('http') || path.startsWith('data:') || path.startsWith('blob:')) return path;
 
   const sanitizedPath = path.startsWith('/') ? path : `/${path}`;
   return `${BASE_URL}${sanitizedPath}`;
@@ -128,11 +128,12 @@ export const jobApplicationApi = {
 };
 
 export const uploadApi = {
-  uploadImage: async (file) => {
+  uploadImage: async (file, folder = 'images') => {
     const formData = new FormData();
     formData.append('image', file);
+    formData.append('folder', folder);
     try {
-      const response = await axiosInstance.post('/upload/image', formData, {
+      const response = await axiosInstance.post('/upload/image/', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       return response.data;
@@ -143,11 +144,12 @@ export const uploadApi = {
       throw error;
     }
   },
-  uploadImages: async (files) => {
+  uploadImages: async (files, folder = 'images') => {
     const formData = new FormData();
     files.forEach(file => formData.append('images', file));
+    formData.append('folder', folder);
     try {
-      const response = await axiosInstance.post('/upload/images', formData, {
+      const response = await axiosInstance.post('/upload/images/', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       return response.data;

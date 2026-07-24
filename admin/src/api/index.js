@@ -17,7 +17,7 @@ export const BASE_URL = RAW_URL.replace(/\/api$/, '') || '';
 // Utility function to get asset URLs (images, files, etc.)
 export const getAssetUrl = path => {
   if (!path) return '';
-  if (path.startsWith('http')) return path;
+  if (path.startsWith('http') || path.startsWith('data:') || path.startsWith('blob:')) return path;
 
   // Ensure path starts with a slash for proper URL construction
   const sanitizedPath = path.startsWith('/') ? path : `/${path}`;
@@ -280,7 +280,7 @@ export const uploadApi = {
       formData.append('images', file);
     });
     try {
-      const response = await axiosInstance.post('/upload/images', formData, {
+      const response = await axiosInstance.post('/upload/images/', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

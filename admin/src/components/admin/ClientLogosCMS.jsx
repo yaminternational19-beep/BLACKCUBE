@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { clientLogoApi, uploadApi } from '@/api';
+import { clientLogoApi, uploadApi, getAssetUrl } from '@/api';
 import { Plus, Trash2, Edit2, Upload, ExternalLink } from 'lucide-react';
 
 export default function ClientLogosCMS() {
@@ -36,7 +36,7 @@ export default function ClientLogosCMS() {
     if (!file) return;
     setUploading(true);
     try {
-      const res = await uploadApi.uploadImage(file, 'employeeprofiles');
+      const res = await uploadApi.uploadImage(file, 'clientlogos');
       if (res.success && res.data?.url) {
         setLogoUrl(res.data.url);
       }
@@ -198,10 +198,10 @@ export default function ClientLogosCMS() {
                     <input type="file" accept="image/*" onChange={handleFileUpload} className="hidden" />
                   </label>
                 </div>
-                {uploading && <p className="text-xs text-cyan-400 mt-1">Uploading to Cloudinary...</p>}
+                {uploading && <p className="text-xs text-cyan-400 mt-1">Uploading image...</p>}
                 {logoUrl && (
                   <div className="mt-2 h-16 w-full bg-black/40 rounded-xl border border-white/5 p-2 flex items-center justify-center">
-                    <img src={logoUrl} alt="Preview" className="max-h-full object-contain" />
+                    <img src={getAssetUrl(logoUrl)} alt="Preview" className="max-h-full object-contain" />
                   </div>
                 )}
               </div>

@@ -1,3 +1,6 @@
+import os
+import uuid
+import logging
 from rest_framework import generics
 from rest_framework.throttling import ScopedRateThrottle
 from django.core.mail import send_mail
@@ -10,7 +13,8 @@ from rest_framework import status
 from django.conf import settings
 import cloudinary
 import cloudinary.uploader
-import uuid
+
+logger = logging.getLogger(__name__)
 
 from rest_framework.permissions import AllowAny, IsAuthenticated, IsAuthenticatedOrReadOnly
 
@@ -110,23 +114,40 @@ class UploadResumeAPIView(APIView):
             return Response({'success': False, 'message': 'No file uploaded'}, status=status.HTTP_400_BAD_REQUEST)
         
         file = request.FILES['resume']
-        
-        cloudinary_storage = getattr(settings, 'CLOUDINARY_STORAGE', {})
-        if not cloudinary_storage.get('CLOUD_NAME'):
-            return Response({'success': False, 'message': 'Cloudinary credentials not configured properly'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-
-        ext = file.name.split('.')[-1]
+        ext = file.name.split('.')[-1] if '.' in file.name else 'pdf'
         unique_filename = f"{uuid.uuid4().hex}.{ext}"
 
+        cloudinary_storage = getattr(settings, 'CLOUDINARY_STORAGE', {})
+        if cloudinary_storage.get('CLOUD_NAME') and cloudinary_storage.get('API_KEY'):
+            try:
+                upload_result = cloudinary.uploader.upload(
+                    file,
+                    folder="blackcube/resumes",
+                    resource_type="raw",
+                    public_id=unique_filename
+                )
+                file_url = upload_result.get('secure_url')
+                return Response({
+                    'success': True,
+                    'data': {
+                        'url': file_url
+                    }
+                })
+            except Exception as e:
+                logger.error(f"Cloudinary upload failed: {e}. Falling back to local media storage.")
+
+        # Fallback to Local Media Storage
         try:
-            upload_result = cloudinary.uploader.upload(
-                file,
-                folder="blackcube/resumes",
-                resource_type="raw",
-                public_id=unique_filename
-            )
+            relative_path = os.path.join("blackcube/resumes", unique_filename).replace('\\', '/')
+            save_path = os.path.join(settings.MEDIA_ROOT, relative_path)
             
-            file_url = upload_result.get('secure_url')
+            os.makedirs(os.path.dirname(save_path), exist_ok=True)
+            with open(save_path, 'wb+') as destination:
+                for chunk in file.chunks():
+                    destination.write(chunk)
+            
+            media_url = settings.MEDIA_URL.rstrip('/')
+            file_url = request.build_absolute_uri(f"{media_url}/{relative_path}")
             
             return Response({
                 'success': True,
@@ -134,11 +155,10 @@ class UploadResumeAPIView(APIView):
                     'url': file_url
                 }
             })
-            
         except Exception as e:
             return Response({
                 'success': False,
-                'message': str(e)
+                'message': f"Upload failed: {str(e)}"
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class UploadImageAPIView(APIView):
@@ -152,14 +172,9 @@ class UploadImageAPIView(APIView):
         
         file = request.FILES['image']
         
-        cloudinary_storage = getattr(settings, 'CLOUDINARY_STORAGE', {})
-        if not cloudinary_storage.get('CLOUD_NAME'):
-            return Response({'success': False, 'message': 'Cloudinary credentials not configured properly'}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
         target_folder = request.data.get('folder', 'images').strip().lower()
         project_name = request.data.get('project_name', '').strip()
         
-        # Cloudinary Structured Folder Hierarchy
         folder_mapping = {
             'employees': 'blackcube/employeeprofiles',
             'employeeprofiles': 'blackcube/employeeprofiles',
@@ -168,25 +183,51 @@ class UploadImageAPIView(APIView):
             'blogs': 'blackcube/blogs',
             'services': 'blackcube/services',
             'testimonials': 'blackcube/testimonials',
+            'clientlogos': 'blackcube/clientlogos',
+            'clients': 'blackcube/clientlogos',
         }
         
         cloud_folder = folder_mapping.get(target_folder, f"blackcube/{target_folder}")
         
-        # If project_name is provided, nest image inside blackcube/projects/<project_name>/
         if target_folder in ['projects', 'portfolios'] and project_name:
             safe_project_name = "".join([c if c.isalnum() or c in ['-', '_'] else '_' for c in project_name.lower()]).strip('_')
             if safe_project_name:
                 cloud_folder = f"blackcube/projects/{safe_project_name}"
             
+        cloudinary_storage = getattr(settings, 'CLOUDINARY_STORAGE', {})
+        if cloudinary_storage.get('CLOUD_NAME') and cloudinary_storage.get('API_KEY'):
+            try:
+                upload_result = cloudinary.uploader.upload(
+                    file,
+                    folder=cloud_folder,
+                    resource_type="auto",
+                    public_id=uuid.uuid4().hex
+                )
+                file_url = upload_result.get('secure_url')
+                return Response({
+                    'success': True,
+                    'data': {
+                        'url': file_url,
+                        'folder': cloud_folder
+                    }
+                })
+            except Exception as e:
+                logger.error(f"Cloudinary upload failed: {e}. Falling back to local media storage.")
+
+        # Fallback to Local Media Storage
         try:
-            upload_result = cloudinary.uploader.upload(
-                file,
-                folder=cloud_folder,
-                resource_type="auto",
-                public_id=uuid.uuid4().hex
-            )
+            ext = file.name.split('.')[-1] if '.' in file.name else 'png'
+            filename = f"{uuid.uuid4().hex}.{ext}"
+            relative_path = os.path.join(cloud_folder, filename).replace('\\', '/')
+            save_path = os.path.join(settings.MEDIA_ROOT, relative_path)
             
-            file_url = upload_result.get('secure_url')
+            os.makedirs(os.path.dirname(save_path), exist_ok=True)
+            with open(save_path, 'wb+') as destination:
+                for chunk in file.chunks():
+                    destination.write(chunk)
+            
+            media_url = settings.MEDIA_URL.rstrip('/')
+            file_url = request.build_absolute_uri(f"{media_url}/{relative_path}")
             
             return Response({
                 'success': True,
@@ -195,11 +236,92 @@ class UploadImageAPIView(APIView):
                     'folder': cloud_folder
                 }
             })
-            
         except Exception as e:
             return Response({
                 'success': False,
-                'message': str(e)
+                'message': f"Upload failed: {str(e)}"
             }, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+class UploadImagesAPIView(APIView):
+    permission_classes = [AllowAny]
+    throttle_classes = [ScopedRateThrottle]
+    throttle_scope = 'uploads'
+
+    def post(self, request, *args, **kwargs):
+        files = request.FILES.getlist('images') or request.FILES.getlist('image')
+        if not files and 'image' in request.FILES:
+            files = [request.FILES['image']]
+        
+        if not files:
+            return Response({'success': False, 'message': 'No files uploaded'}, status=status.HTTP_400_BAD_REQUEST)
+        
+        target_folder = request.data.get('folder', 'images').strip().lower()
+        project_name = request.data.get('project_name', '').strip()
+        
+        folder_mapping = {
+            'employees': 'blackcube/employeeprofiles',
+            'employeeprofiles': 'blackcube/employeeprofiles',
+            'projects': 'blackcube/projects',
+            'portfolios': 'blackcube/projects',
+            'blogs': 'blackcube/blogs',
+            'services': 'blackcube/services',
+            'testimonials': 'blackcube/testimonials',
+            'clientlogos': 'blackcube/clientlogos',
+            'clients': 'blackcube/clientlogos',
+        }
+        
+        cloud_folder = folder_mapping.get(target_folder, f"blackcube/{target_folder}")
+        
+        if target_folder in ['projects', 'portfolios'] and project_name:
+            safe_project_name = "".join([c if c.isalnum() or c in ['-', '_'] else '_' for c in project_name.lower()]).strip('_')
+            if safe_project_name:
+                cloud_folder = f"blackcube/projects/{safe_project_name}"
+            
+        cloudinary_storage = getattr(settings, 'CLOUDINARY_STORAGE', {})
+        use_cloudinary = bool(cloudinary_storage.get('CLOUD_NAME') and cloudinary_storage.get('API_KEY'))
+        
+        uploaded_results = []
+        for file in files:
+            file_url = None
+            if use_cloudinary:
+                try:
+                    upload_result = cloudinary.uploader.upload(
+                        file,
+                        folder=cloud_folder,
+                        resource_type="auto",
+                        public_id=uuid.uuid4().hex
+                    )
+                    file_url = upload_result.get('secure_url')
+                except Exception as e:
+                    logger.error(f"Cloudinary upload failed for {file.name}: {e}. Falling back to local media storage.")
+
+            if not file_url:
+                try:
+                    ext = file.name.split('.')[-1] if '.' in file.name else 'png'
+                    filename = f"{uuid.uuid4().hex}.{ext}"
+                    relative_path = os.path.join(cloud_folder, filename).replace('\\', '/')
+                    save_path = os.path.join(settings.MEDIA_ROOT, relative_path)
+                    
+                    os.makedirs(os.path.dirname(save_path), exist_ok=True)
+                    with open(save_path, 'wb+') as destination:
+                        for chunk in file.chunks():
+                            destination.write(chunk)
+                    
+                    media_url = settings.MEDIA_URL.rstrip('/')
+                    file_url = request.build_absolute_uri(f"{media_url}/{relative_path}")
+                except Exception as e:
+                    logger.error(f"Local storage save failed for {file.name}: {e}")
+
+            if file_url:
+                uploaded_results.append({
+                    'url': file_url,
+                    'filename': file.name,
+                    'folder': cloud_folder
+                })
+
+        return Response({
+            'success': True,
+            'data': uploaded_results
+        })
 
 

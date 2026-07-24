@@ -1,6 +1,6 @@
-asgiref==3.11.1
+asgiref==3.12.1
 cloudinary>=1.40.0
-Django==6.0.6
+Django==6.0.7
 django-cloudinary-storage>=0.3.0
 django-cors-headers==4.9.0
 djangorestframework==3.17.1
@@ -16,5 +16,5 @@ python-decouple==3.8
 pytz==2026.2
 six==1.17.0
 sqlparse==0.5.5
-tzdata==2026.2
+tzdata==2026.3
 urllib3==2.7.0

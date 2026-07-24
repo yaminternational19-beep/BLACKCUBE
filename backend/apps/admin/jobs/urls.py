@@ -6,6 +6,7 @@ from .views import (
     JobApplicationDetailAPIView,
     UploadResumeAPIView,
     UploadImageAPIView,
+    UploadImagesAPIView,
 )
 
 urlpatterns = [
@@ -19,5 +20,9 @@ urlpatterns = [
     
     # Uploads
     path('upload/resume/', UploadResumeAPIView.as_view(), name='upload-resume'),
+    path('upload/resume', UploadResumeAPIView.as_view()),
     path('upload/image/', UploadImageAPIView.as_view(), name='upload-image'),
+    path('upload/image', UploadImageAPIView.as_view()),
+    path('upload/images/', UploadImagesAPIView.as_view(), name='upload-images'),
+    path('upload/images', UploadImagesAPIView.as_view()),
 ]
