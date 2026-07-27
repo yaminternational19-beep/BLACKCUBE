@@ -14,6 +14,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = config('SECRET_KEY', default='django-insecure-ks4ivt+94970e-*=ej2qo4m_djy^f=*h^@+eoi!a&3jy^c*h&y')
 
+# JWT Token Settings
+JWT_SECRET = config('JWT_SECRET', default=SECRET_KEY)
+JWT_EXPIRY_SECONDS = config('JWT_EXPIRY_SECONDS', default=86400, cast=int)
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config('DEBUG', default=True, cast=bool)
 

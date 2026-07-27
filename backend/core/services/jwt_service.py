@@ -4,6 +4,7 @@ import hmac
 import json
 import time
 import os
+from decouple import config
 from django.conf import settings
 from datetime import datetime, time as dt_time, timedelta
 
@@ -16,8 +17,8 @@ def base64url_decode(data: str) -> bytes:
     return base64.urlsafe_b64decode(data + padding)
 
 class JWTService:
-    SECRET_KEY = os.environ.get('JWT_SECRET', getattr(settings, 'SECRET_KEY', 'default_fallback_secret_key'))
-    DEFAULT_EXPIRY = int(os.environ.get('JWT_EXPIRY_SECONDS', 86400))
+    SECRET_KEY = config('JWT_SECRET', default=getattr(settings, 'SECRET_KEY', 'default_fallback_secret_key'))
+    DEFAULT_EXPIRY = config('JWT_EXPIRY_SECONDS', default=86400, cast=int)
 
     @classmethod
     def generate_token(cls, payload: dict, expires_in_seconds: int = None) -> str:
