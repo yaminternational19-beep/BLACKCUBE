@@ -16,7 +16,7 @@ def check_database_health():
         "database_host": db_config.get('HOST'),
         "database_port": db_config.get('PORT'),
         "engine": db_config.get('ENGINE'),
-        "mysql_version": None,
+        "db_version": None,
         "server_time": None,
         "response_time_ms": None,
         "migration_table_exists": False,
@@ -30,17 +30,32 @@ def check_database_health():
         with connection.cursor() as cursor:
             cursor.execute("SELECT 1")
             
-            cursor.execute("SELECT DATABASE()")
-            health_data["active_database"] = cursor.fetchone()[0]
-            
-            cursor.execute("SELECT VERSION()")
-            health_data["mysql_version"] = cursor.fetchone()[0]
-            
-            cursor.execute("SELECT NOW()")
-            health_data["server_time"] = str(cursor.fetchone()[0])
-            
-            cursor.execute("SHOW TABLES LIKE 'django_migrations'")
-            health_data["migration_table_exists"] = bool(cursor.fetchone())
+            if connection.vendor == 'mysql':
+                cursor.execute("SELECT DATABASE()")
+                health_data["active_database"] = cursor.fetchone()[0]
+                
+                cursor.execute("SELECT VERSION()")
+                health_data["db_version"] = cursor.fetchone()[0]
+                health_data["mysql_version"] = health_data["db_version"]
+                
+                cursor.execute("SELECT NOW()")
+                health_data["server_time"] = str(cursor.fetchone()[0])
+                
+                cursor.execute("SHOW TABLES LIKE 'django_migrations'")
+                health_data["migration_table_exists"] = bool(cursor.fetchone())
+            elif connection.vendor == 'sqlite':
+                health_data["active_database"] = str(db_config.get('NAME'))
+                
+                cursor.execute("SELECT sqlite_version()")
+                health_data["db_version"] = cursor.fetchone()[0]
+                
+                cursor.execute("SELECT datetime('now')")
+                health_data["server_time"] = str(cursor.fetchone()[0])
+                
+                cursor.execute("SELECT name FROM sqlite_master WHERE type='table' AND name='django_migrations'")
+                health_data["migration_table_exists"] = bool(cursor.fetchone())
+            else:
+                health_data["active_database"] = str(db_config.get('NAME'))
 
         response_time = (time.time() - start_time) * 1000
         health_data["response_time_ms"] = round(response_time, 2)
