@@ -22,9 +22,14 @@ JWT_EXPIRY_SECONDS = config('JWT_EXPIRY_SECONDS', default=86400, cast=int)
 DEBUG = config('DEBUG', default=True, cast=bool)
 
 # Host & Origin Security Settings (Driven by Environment Variables)
-ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='', cast=Csv())
-CORS_ALLOWED_ORIGINS = config('CORS_ORIGIN', default=config('CORS_ALLOWED_ORIGINS', default='', cast=Csv()), cast=Csv())
-CSRF_TRUSTED_ORIGINS = config('CSRF_TRUSTED_ORIGINS', default='', cast=Csv())
+_allowed_hosts_str = config('ALLOWED_HOSTS', default='')
+ALLOWED_HOSTS = [host.strip() for host in _allowed_hosts_str.split(',') if host.strip()]
+
+_cors_origin_str = config('CORS_ORIGIN', default=config('CORS_ALLOWED_ORIGINS', default=''))
+CORS_ALLOWED_ORIGINS = [origin.strip() for origin in _cors_origin_str.split(',') if origin.strip()]
+
+_csrf_trusted_str = config('CSRF_TRUSTED_ORIGINS', default='')
+CSRF_TRUSTED_ORIGINS = [origin.strip() for origin in _csrf_trusted_str.split(',') if origin.strip()]
 
 # CORS Settings - Fallback to CORS_ALLOWED_ORIGINS if set, otherwise obey CORS_ALLOW_ALL_ORIGINS
 CORS_ALLOW_ALL_ORIGINS = config('CORS_ALLOW_ALL_ORIGINS', default=not bool(CORS_ALLOWED_ORIGINS), cast=bool)
