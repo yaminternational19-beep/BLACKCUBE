@@ -246,7 +246,7 @@ const PortfolioClient = ({ initialData, initialPortfolioItems }) => {
                       <div className="space-y-4">
                         <div className="flex items-center justify-between"><span className="px-3 py-1 bg-[#0f0f0f] text-gray-300 text-xs rounded-full ring-1 ring-white/10">{item.category}</span>{item.featured && <span className="px-3 py-1 bg-yellow-500/20 text-yellow-400 text-xs rounded-full ring-1 ring-yellow-500/30">Featured</span>}</div>
                         <h3 className="text-xl font-semibold text-white">{item.title}</h3>
-                        <p className="text-gray-400 text-sm">{item.description}</p>
+                        <p className="text-gray-400 text-sm line-clamp-4 leading-relaxed">{item.description}</p>
                         <div className="flex flex-wrap gap-2">{(item.technologies || []).map((tech, idx) => <span key={idx} className="px-2 py-1 bg-gray-800/50 text-gray-400 text-xs rounded">{tech}</span>)}</div>
                       </div>
                     </Card>

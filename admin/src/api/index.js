@@ -50,15 +50,24 @@ axiosInstance.interceptors.request.use(config => {
 axiosInstance.interceptors.response.use(response => {
   return response;
 }, error => {
+  // Handle 401 Unauthorized / Token Expiration globally
+  if (error.response && error.response.status === 401) {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('admin_token');
+      localStorage.removeItem('admin_email');
+      localStorage.removeItem('admin_session_id');
+      if (!window.location.pathname.includes('/login')) {
+        window.location.href = '/admin/login';
+      }
+    }
+  }
+
   // Handle errors globally
   if (error.response) {
-    // Server responded with error status
     console.error(`API Error [${error.config?.url}]:`, error.response.data);
   } else if (error.request) {
-    // Request was made but no response received
     console.error(`API Error [${error.config?.url}]: No response received`);
   } else {
-    // Something else happened
     console.error(`API Error [${error.config?.url}]:`, error.message);
   }
   return Promise.reject(error);
@@ -111,10 +120,10 @@ export const pageApi = {
 // Career/Job Posting API functions
 export const careerApi = {
   list: async () => {
-    return apiRequest('/careers', 'GET');
+    return apiRequest('/careers/', 'GET');
   },
   get: async id => {
-    return apiRequest(`/careers/${id}`, 'GET');
+    return apiRequest(`/careers/${id}/`, 'GET');
   },
   create: async jobData => {
     return apiRequest('/careers/', 'POST', jobData);
@@ -123,7 +132,7 @@ export const careerApi = {
     return apiRequest(`/careers/${id}/`, 'PUT', jobData);
   },
   delete: async id => {
-    return apiRequest(`/careers/${id}`, 'DELETE');
+    return apiRequest(`/careers/${id}/`, 'DELETE');
   }
 };
 
@@ -176,13 +185,13 @@ export const contactSubmissionApi = {
     return apiRequest(`/admin/contact-submissions/${query ? `?${query}` : ''}`, 'GET');
   },
   get: async id => {
-    return apiRequest(`/admin/contact-submissions/${id}`, 'GET');
+    return apiRequest(`/admin/contact-submissions/${id}/`, 'GET');
   },
   create: async submissionData => {
     return apiRequest('/admin/contact-submissions/', 'POST', submissionData);
   },
   delete: async id => {
-    return apiRequest(`/admin/contact-submissions/${id}`, 'DELETE');
+    return apiRequest(`/admin/contact-submissions/${id}/`, 'DELETE');
   },
   update: async (id, data) => {
     return apiRequest(`/admin/contact-submissions/${id}/`, 'PATCH', data);
@@ -204,7 +213,7 @@ export const jobApplicationApi = {
     return apiRequest(`/job-applications${query ? `?${query}` : ''}`, 'GET');
   },
   get: async id => {
-    return apiRequest(`/job-applications/${id}`, 'GET');
+    return apiRequest(`/job-applications/${id}/`, 'GET');
   },
   create: async applicationData => {
     return apiRequest('/job-applications/', 'POST', applicationData);
@@ -213,7 +222,7 @@ export const jobApplicationApi = {
     return apiRequest(`/job-applications/${id}/`, 'PUT', applicationData);
   },
   delete: async id => {
-    return apiRequest(`/job-applications/${id}`, 'DELETE');
+    return apiRequest(`/job-applications/${id}/`, 'DELETE');
   },
   markAsRead: async id => {
     return apiRequest(`/job-applications/${id}/`, 'PATCH', { is_read: true });

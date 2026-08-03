@@ -5,7 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { Plus, Trash2, Save, Eye, Upload, X } from "lucide-react";
+import { Plus, Trash2, Save, Eye, Upload, X, User } from "lucide-react";
 import { pageApi, uploadApi, getAssetUrl } from "@/api";
 import { useToast } from "@/hooks/use-toast";
 
@@ -708,7 +708,9 @@ export function AboutPageCMS() {
                           <button onClick={() => updateTeamMember(member.id, 'image', '')} className="absolute top-2 right-2 p-1 bg-red-500 rounded-full text-white hover:bg-red-600">
                             <X className="w-4 h-4" />
                           </button>
-                        </div> : null}
+                        </div> : <div className="w-full h-32 mb-2 rounded-lg bg-primary-slate/40 border border-white/10 flex items-center justify-center text-gray-500">
+                          <User className="w-10 h-10 text-gray-500" />
+                        </div>}
                       <label className="flex items-center justify-center w-full px-4 py-2 bg-primary-slate/30 border border-white/20 rounded-xl cursor-pointer hover:bg-primary-slate/40 transition">
                         <Upload className="w-4 h-4 mr-2" />
                         <span className="text-sm">Upload Image</span>

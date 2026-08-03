@@ -3,7 +3,7 @@
 import { motion } from 'framer-motion';
 import { useEffect, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
-import { Target, Eye, Heart, Calendar } from 'lucide-react';
+import { Target, Eye, Heart, Calendar, User } from 'lucide-react';
 import { FaInstagram as Instagram, FaTwitter as Twitter, FaLinkedin as Linkedin } from 'react-icons/fa';
 import SEO from '@/components/SEO';
 import Layout from '@/components/layout/Layout';
@@ -64,7 +64,7 @@ const AboutClient = ({ initialData }) => {
             f.value.map((m) => ({
               name: m.name,
               position: m.position,
-              image: m.image || `https://i.pravatar.cc/200?u=${encodeURIComponent(m.name || '')}`
+              image: m.image || ''
             }))
           );
         }
@@ -308,7 +308,13 @@ const AboutClient = ({ initialData }) => {
                 <motion.div key={index} initial={{ opacity: 0, y: 30 }} animate={inView ? { opacity: 1, y: 0 } : {}} transition={{ duration: 0.6, delay: index * 0.05 }}>
                   <Card hover className="bg-[#0b0b0b] rounded-2xl p-4 sm:p-5 md:p-6 text-center ring-1 ring-white/5 hover:ring-white/10 hover:-translate-y-1.5 hover:shadow-[0_10px_30px_rgba(0,0,0,0.5)] transition-all duration-300 border-0">
                     <div className="mb-3 md:mb-4">
-                      <img src={getAssetUrl(member.image)} alt={member.name} className="w-16 h-16 sm:w-20 sm:h-20 md:w-20 md:h-20 rounded-full mx-auto object-cover" loading="lazy" />
+                      {member.image ? (
+                        <img src={getAssetUrl(member.image)} alt={member.name} className="w-16 h-16 sm:w-20 sm:h-20 md:w-20 md:h-20 rounded-full mx-auto object-cover" loading="lazy" />
+                      ) : (
+                        <div className="w-16 h-16 sm:w-20 sm:h-20 md:w-20 md:h-20 rounded-full mx-auto bg-gray-800/80 border border-gray-700/50 flex items-center justify-center text-gray-400">
+                          <User className="w-8 h-8 sm:w-10 sm:h-10 text-gray-400" />
+                        </div>
+                      )}
                     </div>
                     <h3 className="text-white font-bold mb-1 text-xs sm:text-sm md:text-base">{member.name}</h3>
                     <p className="text-gray-400 text-[10px] sm:text-xs md:text-sm mb-3 md:mb-4">{member.position}</p>

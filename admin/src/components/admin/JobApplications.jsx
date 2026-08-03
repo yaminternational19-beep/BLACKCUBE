@@ -5,19 +5,47 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card";
 import Button from "@/components/ui/Button";
 import { Badge } from "@/components/ui/badge";
 import { Eye, Download, Trash2, Mail, Phone, Calendar, User, FileText, Search, CheckCircle, Clock, X } from "lucide-react";
-import { jobApplicationApi } from '@/api';
+import { jobApplicationApi, getAssetUrl } from '@/api';
 
 // Custom Admin Input Component
 const AdminInput = ({
   className = "",
   ...props
 }) => <input className={`w-full px-4 py-3 bg-primary-slate/30 border border-white/20 rounded-xl text-white placeholder-primary-gray focus:outline-none focus:ring-2 focus:ring-primary-blue focus:border-primary-blue transition-all duration-200 hover:bg-primary-slate/40 ${className}`} {...props} />;
+
 export function JobApplications() {
   const [applications, setApplications] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [selectedApplication, setSelectedApplication] = useState(null);
+
+  const handleDownloadResume = async (rawUrl, candidateName = 'Candidate') => {
+    if (!rawUrl) {
+      alert('No resume file URL available for this application.');
+      return;
+    }
+    const fullUrl = getAssetUrl(rawUrl);
+    try {
+      const response = await fetch(fullUrl);
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      const blob = await response.blob();
+      const blobUrl = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = blobUrl;
+      const urlWithoutQuery = fullUrl.split('?')[0];
+      const ext = urlWithoutQuery.split('.').pop() || 'pdf';
+      const cleanName = (candidateName || 'Candidate').replace(/[^a-zA-Z0-9_-]/g, '_');
+      link.download = `${cleanName}_Resume.${ext}`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(blobUrl);
+    } catch (error) {
+      console.warn('Direct blob download failed, opening in new tab:', error);
+      window.open(fullUrl, '_blank');
+    }
+  };
 
   const handleViewApplication = async (application) => {
     setSelectedApplication(application);
@@ -222,9 +250,13 @@ export function JobApplications() {
                       </div>
                       <div className="flex items-center space-x-2">
                         <FileText className="w-4 h-4 text-primary-blue" />
-                        <a href={application.resumeUrl} target="_blank" rel="noopener noreferrer" className="text-primary-blue hover:underline">
-                          View Resume
-                        </a>
+                        {application.resumeUrl ? (
+                          <a href={getAssetUrl(application.resumeUrl)} target="_blank" rel="noopener noreferrer" className="text-primary-blue hover:underline">
+                            View Resume
+                          </a>
+                        ) : (
+                          <span className="text-gray-500 text-sm">No Resume</span>
+                        )}
                       </div>
                     </div>
 
@@ -316,19 +348,16 @@ export function JobApplications() {
                     </div>
                     <div>
                       <label className="text-sm text-primary-gray">Resume</label>
-                      <div className="mt-1">
-                        <Button size="sm" variant="outline" onClick={() => {
-                      const link = document.createElement('a');
-                      link.href = selectedApplication.resumeUrl;
-                      link.download = selectedApplication.name + "_resume";
-                      document.body.appendChild(link);
-                      link.click();
-                      document.body.removeChild(link);
-                    }}>
+                      <div className="mt-1 flex items-center gap-2">
+                        <Button size="sm" variant="outline" onClick={() => handleDownloadResume(selectedApplication.resumeUrl, selectedApplication.name)} disabled={!selectedApplication.resumeUrl}>
                           <Download className="w-4 h-4 mr-2" />
                           Download Resume
                         </Button>
-
+                        {selectedApplication.resumeUrl && (
+                          <a href={getAssetUrl(selectedApplication.resumeUrl)} target="_blank" rel="noopener noreferrer" className="px-3 py-1.5 border border-white/10 rounded-lg text-sm text-primary-blue hover:bg-white/5 transition flex items-center">
+                            <Eye className="w-4 h-4 mr-1" /> View Resume
+                          </a>
+                        )}
                       </div>
                     </div>
                   </div>
