@@ -50,8 +50,8 @@ axiosInstance.interceptors.request.use(config => {
 axiosInstance.interceptors.response.use(response => {
   return response;
 }, error => {
-  // Handle 401 Unauthorized / Token Expiration globally
-  if (error.response && error.response.status === 401) {
+  // Handle 401 Unauthorized / 403 Forbidden / Token Expiration globally
+  if (error.response && (error.response.status === 401 || error.response.status === 403)) {
     if (typeof window !== 'undefined') {
       localStorage.removeItem('admin_token');
       localStorage.removeItem('admin_email');

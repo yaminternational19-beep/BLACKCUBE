@@ -63,6 +63,7 @@ export function AdminTopbar({}) {
             <DropdownMenuItem className="hover:bg-muted cursor-pointer text-destructive" onClick={() => {
             localStorage.removeItem('admin_token');
             localStorage.removeItem('admin_email');
+            localStorage.removeItem('admin_session_id');
             window.location.href = '/admin/login';
           }}>
               <LogOut className="mr-2 h-4 w-4" />
